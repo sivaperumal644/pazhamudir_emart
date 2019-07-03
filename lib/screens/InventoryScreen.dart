@@ -15,7 +15,24 @@ class InventoryScreenState extends State<InventoryScreen> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.topCenter,
-      children: <Widget>[itemsList(), SearchWidget()],
+      children: <Widget>[
+        Scaffold(
+          body: itemsList(),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {},
+            label: Text(
+              'NEW ITEM',
+              style: TextStyle(
+                  fontSize: 14,
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.w500),
+            ),
+            icon: Icon(Icons.add),
+            backgroundColor: PRIMARY_COLOR,
+          ),
+        ),
+        SearchWidget(),
+      ],
     );
   }
 
