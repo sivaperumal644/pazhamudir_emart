@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/navigation_drawer.dart';
 import 'OrdersScreen.dart';
@@ -34,6 +35,7 @@ class HomeScreenState extends State<HomeScreen> {
               )),
         ),
         body: TabBarView(
+          physics: FixedExtentScrollPhysics(),
           children: <Widget>[OrdersScreen(), InventoryScreen()],
         ),
       ),
