@@ -103,9 +103,14 @@ class AuthScreenState extends State<AuthScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 32.0),
       child: TextField(
+        style: TextStyle(color: WHITE_COLOR),
         decoration: InputDecoration(
           labelText: "Sign in token",
           focusedBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: WHITE_COLOR)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: WHITE_COLOR)),
+          border:
               UnderlineInputBorder(borderSide: BorderSide(color: WHITE_COLOR)),
           labelStyle: TextStyle(
             color: WHITE_COLOR,
