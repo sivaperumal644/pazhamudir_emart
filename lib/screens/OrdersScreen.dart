@@ -21,11 +21,12 @@ class OrdersScreenState extends State<OrdersScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 32.0, left: 20.0),
               child: Text(
-                'INCOMING NEW ORDER',
+                'INCOMING NEW ORDERS',
                 style: TextStyle(
                     color: BLACK_COLOR,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                    fontSize: 14,
+                    letterSpacing: 1.0),
               ),
             ),
             Padding(
@@ -44,11 +45,13 @@ class OrdersScreenState extends State<OrdersScreen> {
                 style: TextStyle(
                     color: BLACK_COLOR,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                    fontSize: 14,
+                    letterSpacing: 1.0),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding:
+                  const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
               child: ServiceOrdersWidget(
                 orderNumber: '#3459 (15 items)',
                 price: 'Rs. 5670',
@@ -60,7 +63,8 @@ class OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding:
+                  const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
               child: ServiceOrdersWidget(
                   orderNumber: '#3459 (15 items)',
                   price: 'Rs. 5670',
@@ -71,14 +75,23 @@ class OrdersScreenState extends State<OrdersScreen> {
                   deliveryIncharge:
                       'Delivery in-charge: Mr. Sivaram (9977875623)'),
             ),
+            Container(
+              height: 24,
+            ),
             Center(
-                child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'VIEW ORDER HISTORY',
-                style: TextStyle(color: BLACK_COLOR, fontSize: 14),
-              ),
-            ))
+                child: FlatButton(
+                    onPressed: () {},
+                    child: Text(
+                      'VIEW ORDER HISTORY',
+                      style: TextStyle(
+                          color: BLACK_COLOR,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.0),
+                    ))),
+            Container(
+              height: 24,
+            )
           ],
         ),
       ]),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pazhamuthir_emart/components/InventoryListItemWidget.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/components/SearchWidget.dart';
 
@@ -12,12 +13,37 @@ class InventoryScreen extends StatefulWidget {
 class InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[SearchWidget(), itemContainer()],
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: <Widget>[itemsList(), SearchWidget()],
     );
   }
 
-  
+  Widget itemsList() {
+    return ListView(
+      children: <Widget>[
+        Container(
+          height: 100,
+        ),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+        InventoryItemWidget(),
+      ],
+    );
+  }
 
   Widget itemContainer() {
     return Container(
@@ -29,10 +55,7 @@ class InventoryScreenState extends State<InventoryScreen> {
             height: 52,
           ),
           Column(
-            children: <Widget>[
-              Text('Carrot'),
-              Text('Rs. 30/kg')
-            ],
+            children: <Widget>[Text('Carrot'), Text('Rs. 30/kg')],
           )
         ],
       ),

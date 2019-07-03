@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart/constants/styles.dart';
 
 class IncomingOrderWidget extends StatelessWidget {
   String orderNumber;
@@ -26,7 +27,11 @@ class IncomingOrderWidget extends StatelessWidget {
           color: WHITE_COLOR,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: PRIMARY_COLOR, width: 1),
-          boxShadow: [BoxShadow(color: SHADOW_COLOR, blurRadius: 20.0)]),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.deepOrangeAccent.withOpacity(0.5),
+                blurRadius: 16.0)
+          ]),
       padding: EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,21 +55,32 @@ class IncomingOrderWidget extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              address,
-              textAlign: TextAlign.start,
-            ),
+          Container(
+            height: 8,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+              Expanded(
                 child: Text(
-                  orderPlaced,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  address,
+                  softWrap: true,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Text(
+                    orderPlaced,
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               Padding(

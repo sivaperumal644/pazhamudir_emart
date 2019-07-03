@@ -59,6 +59,7 @@ class ServiceOrdersWidget extends StatelessWidget {
             child: Text(
               address,
               textAlign: TextAlign.start,
+              style: TextStyle(fontSize: 12),
             ),
           ),
           Padding(
@@ -69,19 +70,25 @@ class ServiceOrdersWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(top: 24.0),
             child: Text(
               statusOfDelivery,
               textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 12, color: BLUE_COLOR),
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                  color: BLUE_COLOR),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(deliveryIncharge),
+              Expanded(
+                child: Text(
+                  deliveryIncharge,
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
               Icon(
                 Icons.arrow_forward,

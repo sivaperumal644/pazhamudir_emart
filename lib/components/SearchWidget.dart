@@ -1,37 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 
-class SearchWidget extends StatelessWidget {
-  const SearchWidget({
-    Key key,
-  }) : super(key: key);
+class SearchWidget extends StatefulWidget {
+  FocusNode focusNode;
+  SearchWidget({Key key, FocusNode focusNode}) : super(key: key) {
+    this.focusNode = focusNode;
+  }
 
+  @override
+  _SearchWidgetState createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  String searchText = '';
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-      width: 377,
-      height: 55,
+      height: 50,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(left: 16),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 10),
+            width: 24,
           ),
           Expanded(
               child: TextField(
-            style: TextStyle(fontFamily: 'Raleway'),
-            decoration: InputDecoration(
-                hintStyle: TextStyle(fontFamily: 'Raleway'),
-                hintText: "Search for items",
-                border: InputBorder.none,
-                suffixIcon: Icon(
-                  Icons.search,
-                  size: 30,
-                )),
-          )),
+                  focusNode: widget.focusNode,
+                  onChanged: (str) {
+                    setState(() {
+                      searchText = str;
+                    });
+                  },
+                  style: TextStyle(
+                    fontFamily: 'Raleway',
+                    fontSize: 18,
+                  ),
+                  decoration: InputDecoration.collapsed(
+                    hintStyle: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontSize: 18,
+                    ),
+                    hintText: "Search for items",
+                  ))),
+          Container(
+            width: 4,
+          ),
+          IconButton(
+            icon: Icon(searchText.isEmpty ? Icons.search : Icons.cancel),
+          )
         ],
       ),
       decoration: BoxDecoration(
