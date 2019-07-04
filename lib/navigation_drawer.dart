@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/screens/ShopDetailsScreens.dart';
+import 'package:pazhamuthir_emart/screens/StaffScreen.dart';
 
 class Navigation extends StatelessWidget {
   @override
@@ -80,6 +81,12 @@ class Navigation extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ListTile(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StaffScreen()));
+                },
                 title: Text(
                   'STAFF',
                   style: TextStyle(fontSize: 16, color: WHITE_COLOR),

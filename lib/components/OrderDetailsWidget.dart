@@ -54,6 +54,8 @@ class OrderDetailsWidget extends StatelessWidget {
         Row(
           children: <Widget>[
             OutlineButton(
+              shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(12.0)),
               child: Text(
                 'CALL',
                 style: TextStyle(color: GREEN_COLOR),
@@ -72,11 +74,18 @@ class OrderDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget orderItemTotal(){
+  Widget orderItemTotal() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
-        children: <Widget>[Text('Total', style: TextStyle(fontWeight: FontWeight.bold),), Spacer(), Text('Rs. 2450', style: TextStyle(fontWeight: FontWeight.bold))],
+        children: <Widget>[
+          Text(
+            'Total',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Spacer(),
+          Text('Rs. 2450', style: TextStyle(fontWeight: FontWeight.bold))
+        ],
       ),
     );
   }
