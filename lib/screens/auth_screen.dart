@@ -27,36 +27,40 @@ class AuthScreenState extends State<AuthScreen> {
       backgroundColor: WHITE_COLOR,
       body: ListView(
         children: <Widget>[
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 80.0),
-              child: Text('Pazhamuthir',
-                  style: TextStyle(
-                      color: PRIMARY_COLOR,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold)),
-            ),
+          Column(
+            children: <Widget>[
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top:57.0),
+                  child: Text('Pazhamuthir',
+                      style: TextStyle(
+                          color: PRIMARY_COLOR,
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+              Center(
+                child: Text('E-MART',
+                    style: TextStyle(
+                        color: BLACK_COLOR,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0)),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 32.0),
+                  child: Text('SERVICE APP',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: PRIMARY_COLOR,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0)),
+                ),
+              ),
+              _bottomSheet(),
+            ],
           ),
-          Center(
-            child: Text('E-MART',
-                style: TextStyle(
-                    color: BLACK_COLOR,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0)),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 32.0),
-              child: Text('SERVICE APP',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: PRIMARY_COLOR,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0)),
-            ),
-          ),
-          _bottomSheet(),
         ],
       ),
     );
@@ -64,7 +68,8 @@ class AuthScreenState extends State<AuthScreen> {
 
   Widget _bottomSheet() {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height / 10),
+      margin:
+          EdgeInsets.only(top: MediaQuery.of(context).size.height / 10 - 33),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),

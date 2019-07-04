@@ -7,5 +7,5 @@ const WHITE_COLOR = Colors.white;
 const BLUE_COLOR = Color.fromRGBO(7, 113, 172, 1);
 const LIGHT_GREEN = Color.fromRGBO(103, 180, 26, 100);
 const RED_COLOR = Color.fromRGBO(216, 56, 56, 100);
-const GREY_COLOR = Color.fromRGBO(196, 196, 196, 100);
+const GREY_COLOR = Color.fromRGBO(196, 196, 196, 1);
 const SHADOW_COLOR = Color.fromRGBO(196, 196, 196, 1);

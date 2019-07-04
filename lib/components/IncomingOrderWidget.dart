@@ -24,14 +24,9 @@ class IncomingOrderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: WHITE_COLOR,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: PRIMARY_COLOR, width: 1),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.deepOrangeAccent.withOpacity(0.5),
-                blurRadius: 16.0)
-          ]),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: PRIMARY_COLOR, width: 1),
+      ),
       padding: EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

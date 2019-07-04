@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/constants/styles.dart';
 
 class OrderDetailsWidget extends StatelessWidget {
@@ -34,6 +36,7 @@ class OrderDetailsWidget extends StatelessWidget {
         new OrderItemListItemWidget(),
         new OrderItemListItemWidget(),
         new OrderItemListItemWidget(),
+        orderItemTotal(),
         Container(
           height: 24,
         ),
@@ -51,11 +54,30 @@ class OrderDetailsWidget extends StatelessWidget {
         Row(
           children: <Widget>[
             OutlineButton(
-              child: Text('CALL'),
+              child: Text(
+                'CALL',
+                style: TextStyle(color: GREEN_COLOR),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 32.0),
+              child: Text(
+                'Call the customer',
+                style: TextStyle(fontSize: 14),
+              ),
             )
           ],
         )
       ],
+    );
+  }
+
+  Widget orderItemTotal(){
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: <Widget>[Text('Total', style: TextStyle(fontWeight: FontWeight.bold),), Spacer(), Text('Rs. 2450', style: TextStyle(fontWeight: FontWeight.bold))],
+      ),
     );
   }
 }

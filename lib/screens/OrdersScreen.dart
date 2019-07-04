@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/components/IncomingOrderWidget.dart';
 import 'package:pazhamuthir_emart/components/ServiceOrdersWidget.dart';
+import 'package:pazhamuthir_emart/screens/OrderDetailScreen.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -31,12 +32,22 @@ class OrdersScreenState extends State<OrdersScreen> {
             ),
             Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: IncomingOrderWidget(
-                  orderNumber: '#3459 (15 items)',
-                  price: 'Rs. 5670',
-                  address: 'Mr. Vineesh, 10/672, Janata Nagar, Saravanampatti',
-                  orderPlaced:
-                      'Placed 23 minutes ago (3:45 PM, 28th July 2019)',
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => OrderDetailScreen()));
+                  },
+                  child: IncomingOrderWidget(
+                    orderNumber: '#3459 (15 items)',
+                    price: 'Rs. 5670',
+                    address:
+                        'Mr. Vineesh, 10/672, Janata Nagar, Saravanampatti',
+                    orderPlaced:
+                        'Placed 23 minutes ago (3:45 PM, 28th July 2019)',
+                  ),
                 )),
             Padding(
               padding: const EdgeInsets.only(top: 16.0, left: 20.0),
