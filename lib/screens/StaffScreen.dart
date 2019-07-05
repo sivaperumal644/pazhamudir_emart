@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/components/StaffDetailsCard.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'EditMemberScreen.dart';
 
 class StaffScreen extends StatelessWidget {
   @override
@@ -41,9 +42,17 @@ class StaffScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 5.0),
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 5.0),
+                child: StaffDetailsCard(
+                  staffName: 'Mr. Siva, 9988776677',
+                  staffRole: 'DELIVERY EXECUTIVE',
+                  token: 'Sign in Token: PER8817A',
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
               child: StaffDetailsCard(
-                staffName: 'Mr. Perumal, 9988776677',
+                staffName: 'Mr. Siva, 9988776677',
                 staffRole: 'DELIVERY EXECUTIVE',
                 token: 'Sign in Token: PER8817A',
               ),
@@ -51,7 +60,7 @@ class StaffScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
               child: StaffDetailsCard(
-                staffName: 'Mr. Perumal, 9988776677',
+                staffName: 'Mr. Siva, 9988776677',
                 staffRole: 'DELIVERY EXECUTIVE',
                 token: 'Sign in Token: PER8817A',
               ),
@@ -59,15 +68,7 @@ class StaffScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
               child: StaffDetailsCard(
-                staffName: 'Mr. Perumal, 9988776677',
-                staffRole: 'DELIVERY EXECUTIVE',
-                token: 'Sign in Token: PER8817A',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-              child: StaffDetailsCard(
-                staffName: 'Mr. Perumal, 9988776677',
+                staffName: 'Mr. Siva, 9988776677',
                 staffRole: 'DELIVERY EXECUTIVE',
                 token: 'Sign in Token: PER8817A',
               ),

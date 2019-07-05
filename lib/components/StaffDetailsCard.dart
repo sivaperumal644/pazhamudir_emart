@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart/screens/EditMemberScreen.dart';
 
 class StaffDetailsCard extends StatelessWidget {
   String staffName;
@@ -15,43 +16,51 @@ class StaffDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  staffName,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditMemberDetailsScreen()));
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    staffName,
+                    style: TextStyle(
+                        fontFamily: 'Raleway',
+                        color: BLACK_COLOR,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(Icons.edit)
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  staffRole,
                   style: TextStyle(
-                      fontFamily: 'Raleway',
-                      color: BLACK_COLOR,
-                      fontSize: 18,
+                      fontSize: 14,
+                      color: GREEN_COLOR,
                       fontWeight: FontWeight.bold),
                 ),
-                Icon(Icons.edit)
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: Text(
-                staffRole,
-                style: TextStyle(
-                    fontSize: 14,
-                    color: GREEN_COLOR,
-                    fontWeight: FontWeight.bold),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Text(
-                token,
-                style: TextStyle(color: BLACK_COLOR, fontSize: 14),
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Text(
+                  token,
+                  style: TextStyle(color: BLACK_COLOR, fontSize: 14),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
