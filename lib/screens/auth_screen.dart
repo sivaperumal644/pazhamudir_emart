@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:pazhamuthir_emart/appState.dart';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: AuthScreen(),
-    );
+    return ChangeNotifierProvider<AppState>(
+        builder: (_) => AppState(),
+        child: MaterialApp(
+          home: AuthScreen(),
+          theme: ThemeData(
+            canvasColor: Colors.transparent
+          ),
+        ));
   }
 }
 
@@ -31,7 +38,7 @@ class AuthScreenState extends State<AuthScreen> {
             children: <Widget>[
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top:57.0),
+                  padding: const EdgeInsets.only(top: 57.0),
                   child: Text('Pazhamuthir',
                       style: TextStyle(
                           color: PRIMARY_COLOR,

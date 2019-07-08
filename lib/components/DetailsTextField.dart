@@ -12,28 +12,25 @@ class DetailsTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10.0, left: 28.0, right: 28.0),
-      child: TextField(
-        style: TextStyle(
-            color: BLACK_COLOR,
+    return TextField(
+      style: TextStyle(
+          color: BLACK_COLOR,
+          fontFamily: 'Raleway',
+          fontSize: 18,
+          fontWeight: FontWeight.bold),
+      decoration: InputDecoration(
+          focusedBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: BLACK_COLOR)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: BLACK_COLOR)),
+          border:
+              UnderlineInputBorder(borderSide: BorderSide(color: BLACK_COLOR)),
+          labelStyle: TextStyle(
+            color: Color.fromRGBO(0, 0, 0, 0.4),
             fontFamily: 'Raleway',
             fontSize: 18,
-            fontWeight: FontWeight.bold),
-        decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: BLACK_COLOR)),
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: BLACK_COLOR)),
-            border: UnderlineInputBorder(
-                borderSide: BorderSide(color: BLACK_COLOR)),
-            labelStyle: TextStyle(
-              color: BLACK_COLOR,
-              fontFamily: 'Raleway',
-              fontSize: 18,
-            ),
-            labelText: inputText),
-      ),
+          ),
+          labelText: inputText),
     );
   }
 }

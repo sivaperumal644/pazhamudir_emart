@@ -8,17 +8,23 @@ class EditMemberDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: WHITE_COLOR,
+      body: ListView(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 16.0),
             child: AppTitleWidget(
               title: "Edit Staff Detail",
             ),
           ),
-          DetailsTextField(inputText: 'Name'),
-          DetailsTextField(inputText: 'Phone Number'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 10.0),
+            child: DetailsTextField(inputText: 'Name'),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 10.0),
+            child: DetailsTextField(inputText: 'Phone Number'),
+          ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 24.0),
             child: Column(
