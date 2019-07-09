@@ -3,18 +3,18 @@ import 'package:pazhamuthir_emart/constants/colors.dart';
 
 class SecondaryButtonWidget extends StatelessWidget {
   String buttonText;
-  SecondaryButtonWidget({
-    Key key,
-    String buttonText,
-  }) : super(key: key) {
+  Function onPressed;
+  SecondaryButtonWidget({Key key, String buttonText, Function onPressed})
+      : super(key: key) {
     this.buttonText = buttonText;
+    this.onPressed = onPressed;
   }
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       color: GREEN_COLOR,
-      onPressed: () {},
+      onPressed: onPressed,
       shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(12.0)),
       child: Padding(
