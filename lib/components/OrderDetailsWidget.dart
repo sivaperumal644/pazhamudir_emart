@@ -54,6 +54,7 @@ class OrderDetailsWidget extends StatelessWidget {
         Row(
           children: <Widget>[
             OutlineButton(
+              onPressed: (){},
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(12.0)),
               child: Text(

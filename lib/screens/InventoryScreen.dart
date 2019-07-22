@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pazhamuthir_emart/appState.dart';
 import 'package:pazhamuthir_emart/components/InventoryListItemWidget.dart';
-import 'package:pazhamuthir_emart/components/PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/components/SearchWidget.dart';
-import 'package:pazhamuthir_emart/constants/graphql/new_inventory_graphql.dart';
+import 'package:pazhamuthir_emart/constants/graphql/allInventory_graphql.dart';
 import 'package:pazhamuthir_emart/model/InventoryItemModel.dart';
 import 'package:pazhamuthir_emart/components/ItemModalBottomSheet.dart';
+import 'package:provider/provider.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override
@@ -24,10 +25,13 @@ class InventoryScreenState extends State<InventoryScreen> {
       alignment: Alignment.topCenter,
       children: <Widget>[
         Scaffold(
-          body: itemsList(),
+          body: _getInventoryQuery(),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ItemModalBottomSheet()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ItemModalBottomSheet()));
               // showModalBottomSheet(
               //     context: context,
               //     builder: (BuildContext context) {
@@ -50,47 +54,56 @@ class InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
-  Widget itemsList() {
-    return ListView(
-      children: <Widget>[
-        Container(
-          height: 100,
-        ),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-        InventoryItemWidget(),
-      ],
+  Widget itemsList(List<InventoryItemModel> inventories) {
+    return ListView.builder(
+      itemCount: inventories.length + 1,
+      itemBuilder: (context, index) {
+        if (index == inventories.length) {
+          return Container(
+            height: 80,
+          );
+        }
+        return itemContainer(inventories[index]);
+      },
     );
   }
 
-  Widget itemContainer() {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Image.asset(
-            'images/carrot.png',
-            width: 52,
-            height: 52,
-          ),
-          Column(
-            children: <Widget>[Text('Carrot'), Text('Rs. 30/kg')],
-          )
-        ],
+  Widget itemContainer(InventoryItemModel inventory) {
+    return InventoryItemWidget(
+      name: inventory.name,
+      price: inventory.price,
+      unit: inventory.unit,
+      inStock: inventory.inStock,
+    );
+  }
+
+  Widget _getInventoryQuery() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getAllInventory,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 10,
       ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        print(result.errors);
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null && result.data['getAllInventory'] != null) {
+          List inventoryList = result.data['getAllInventory']['inventory'];
+          final inventories = inventoryList
+              .map((item) => InventoryItemModel.fromJson(item))
+              .toList();
+          return Container(
+              margin: EdgeInsets.only(top: 100), child: itemsList(inventories));
+        }
+        return Container();
+      },
     );
   }
 }
-

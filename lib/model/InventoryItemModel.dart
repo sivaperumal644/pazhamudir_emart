@@ -14,11 +14,11 @@ class InventoryItemModel {
     return InventoryItemModel(
       name: json['name'],
       id: json['id'],
-      price: json['price'],
-      perUnit: json['perUnit'],
+      price: json['price'].toDouble(),
+      perUnit: json['perUnit'].toDouble(),
       unit: json['unit'],
       category: json['category'],
-      inStock: json['inStock'],
+      inStock: json['inStock'].toDouble(),
       photoUrl: json['photoUrl']
     );
   }

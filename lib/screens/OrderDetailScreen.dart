@@ -4,9 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:pazhamuthir_emart/components/OrderDetailsWidget.dart';
 import 'package:pazhamuthir_emart/components/PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:provider/provider.dart';
-
-import '../appState.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   @override
@@ -18,7 +15,6 @@ class OrderDetailScreen extends StatefulWidget {
 class OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       appBar: AppBar(
