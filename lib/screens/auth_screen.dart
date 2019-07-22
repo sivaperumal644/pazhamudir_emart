@@ -3,22 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'home_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:pazhamuthir_emart/appState.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AppState>(
-        builder: (_) => AppState(),
-        child: MaterialApp(
-          home: AuthScreen(),
-          theme: ThemeData(
-            canvasColor: Colors.transparent
-          ),
-        ));
-  }
-}
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pazhamuthir_emart/constants/graphql/auth_graphql.dart';
+import 'package:pazhamuthir_emart/model/StaffModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -28,6 +16,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class AuthScreenState extends State<AuthScreen> {
+  String tokenInput = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +87,7 @@ class AuthScreenState extends State<AuthScreen> {
                   fontFamily: 'RaleWay',
                   fontWeight: FontWeight.bold)),
           _signinTextField(),
-          _signinButton(),
+          _mutationComponent(),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -124,6 +114,11 @@ class AuthScreenState extends State<AuthScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 32.0),
       child: TextField(
+        onChanged: (val) {
+          setState(() {
+            tokenInput = val;
+          });
+        },
         style: TextStyle(
             color: WHITE_COLOR,
             fontFamily: 'Raleway',
@@ -146,7 +141,7 @@ class AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  Widget _signinButton() {
+  Widget _signinButton(RunMutation runmutation) {
     return Padding(
       padding: const EdgeInsets.only(top: 36.0),
       child: Row(
@@ -159,10 +154,8 @@ class AuthScreenState extends State<AuthScreen> {
                 child: RaisedButton(
                   color: WHITE_COLOR,
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    print(tokenInput);
+                    runmutation({'token': tokenInput});
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -178,6 +171,39 @@ class AuthScreenState extends State<AuthScreen> {
                   ),
                 ))
           ]),
+    );
+  }
+
+  Widget _mutationComponent() {
+    return Mutation(
+      options: MutationOptions(
+        document: signInMutation,
+      ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult result,
+      ) {
+        print(result.errors);
+        return _signinButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) async {
+        print(resultData.toString());
+        final prefs = await SharedPreferences.getInstance();
+        if (resultData != null && resultData['staffLogin']['error'] == null) {
+          final user = StaffModel.fromJson(resultData['staffLogin']['user']);
+          if (user != null) {
+            await prefs.setString(
+                'token', resultData['staffLogin']['jwtToken']);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          }
+        }
+      },
     );
   }
 }
