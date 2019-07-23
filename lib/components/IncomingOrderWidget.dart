@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
 import 'package:pazhamuthir_emart/constants/styles.dart';
+import 'package:pazhamuthir_emart/model/OrderModel.dart';
 
 class IncomingOrderWidget extends StatelessWidget {
-  String orderNumber;
-  String price;
-  String address;
-  String orderPlaced;
-  IncomingOrderWidget(
-      {Key key,
-      String orderNumber,
-      String price,
-      String address,
-      String orderPlaced})
-      : super(key: key) {
-    this.orderNumber = orderNumber;
-    this.price = price;
-    this.address = address;
-    this.orderPlaced = orderPlaced;
-  }
+  final OrderModel order;
+
+  const IncomingOrderWidget({Key key, this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +23,14 @@ class IncomingOrderWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                orderNumber,
+                order.orderNo,
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                price,
+                order.,
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
