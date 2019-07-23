@@ -110,7 +110,7 @@ class ShopDetailsScreen extends StatelessWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: SecondaryButtonWidget(
                                           buttonText: 'PAYMENT COLLECTED',
-                                          onPressed: (){},
+                                          onPressed: () {},
                                         ),
                                       ),
                                       Padding(

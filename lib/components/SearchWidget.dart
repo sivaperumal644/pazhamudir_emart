@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart/appState.dart';
+import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
   FocusNode focusNode;
@@ -12,9 +14,11 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
+  
   String searchText = '';
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Container(
       margin: EdgeInsets.only(top: 20, left: 20, right: 20),
       height: 50,
@@ -28,9 +32,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               child: TextField(
                   focusNode: widget.focusNode,
                   onChanged: (str) {
-                    setState(() {
-                      searchText = str;
-                    });
+                    appState.setSearchText(str);
                   },
                   style: TextStyle(
                     fontFamily: 'Raleway',
@@ -47,7 +49,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             width: 4,
           ),
           IconButton(
-            icon: Icon(searchText.isEmpty ? Icons.search : Icons.cancel),
+            icon: Icon(searchText.isEmpty ? Icons.search : Icons.cancel), onPressed: () {},
           )
         ],
       ),

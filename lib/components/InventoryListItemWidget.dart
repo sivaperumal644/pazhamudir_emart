@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart/constants/styles.dart';
 
 class InventoryItemWidget extends StatelessWidget {
+  final String photoUrl;
+  final String name;
+  final String unit;
+  final double price;
+  final double inStock;
+  final String searchText;
+
+  const InventoryItemWidget(
+      {Key key, this.photoUrl, this.name, this.unit, this.price, this.inStock, this.searchText})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    if(!name.toLowerCase().contains(searchText.toLowerCase())){
+      return Container();
+    }
     return Container(
       child: InkWell(
         onTap: () {},
@@ -25,11 +39,11 @@ class InventoryItemWidget extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('Carrot', style: RaleWayTitle),
+                        Text(name, style: RaleWayTitle),
                         Container(
                           height: 2,
                         ),
-                        Text('Rs. 30/kg')
+                        Text('Rs. $price/$unit')
                       ],
                     ),
                   ),
@@ -37,7 +51,7 @@ class InventoryItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        '500 kg in stock',
+                        '$inStock $unit in stock',
                         style: TextStyle(fontSize: 14),
                       ),
                       Container(
