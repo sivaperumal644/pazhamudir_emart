@@ -7,13 +7,17 @@ class InventoryItemWidget extends StatelessWidget {
   final String unit;
   final double price;
   final double inStock;
+  final String searchText;
 
   const InventoryItemWidget(
-      {Key key, this.photoUrl, this.name, this.unit, this.price, this.inStock})
+      {Key key, this.photoUrl, this.name, this.unit, this.price, this.inStock, this.searchText})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(!name.toLowerCase().contains(searchText.toLowerCase())){
+      return Container();
+    }
     return Container(
       child: InkWell(
         onTap: () {},

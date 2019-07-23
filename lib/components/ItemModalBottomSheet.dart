@@ -257,6 +257,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
           'category': input['category'],
           'inStock': double.parse(input['inStock'])
         });
+        Navigator.pop(context);
       },
     );
   }

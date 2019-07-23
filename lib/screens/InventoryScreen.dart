@@ -69,11 +69,13 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget itemContainer(InventoryItemModel inventory) {
+    final appState = Provider.of<AppState>(context);
     return InventoryItemWidget(
       name: inventory.name,
       price: inventory.price,
       unit: inventory.unit,
       inStock: inventory.inStock,
+      searchText: appState.getSearchText,
     );
   }
 
