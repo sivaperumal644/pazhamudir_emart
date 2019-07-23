@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/components/IncomingOrderWidget.dart';
 import 'package:pazhamuthir_emart_service/components/ServiceOrdersWidget.dart';
+import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
 import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:pazhamuthir_emart_service/screens/OrderDetailScreen.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 
@@ -16,6 +18,8 @@ class OrdersScreen extends StatefulWidget {
 
 class OrdersScreenState extends State<OrdersScreen> {
   OrderModel temporaryModel = OrderModel(
+      staff: StaffModel(name: 'Sivaram', phoneNumber: '6969696969'),
+      status: OrderStatuses.RECEIVED_BY_STORE,
       id: 'SDE2424',
       address: AddressModel(
           name: 'Vineesh',
@@ -78,27 +82,15 @@ class OrdersScreenState extends State<OrdersScreen> {
               padding:
                   const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
               child: ServiceOrdersWidget(
-                orderNumber: '#3459 (15 items)',
-                price: 'Rs. 5670',
-                address: 'Mr. Vineesh, 10/672, Janata Nagar, Saravanampatti',
-                orderPlaced: 'Placed 23 minutes ago (3:45 PM, 28th July 2019)',
-                statusOfDelivery: 'SENT FOR DELIVERY',
-                deliveryIncharge:
-                    'Delivery in-charge: Mr. Sivaram (9977875623)',
+                order: temporaryModel,
               ),
             ),
             Padding(
               padding:
                   const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
               child: ServiceOrdersWidget(
-                  orderNumber: '#3459 (15 items)',
-                  price: 'Rs. 5670',
-                  address: 'Mr. Vineesh, 10/672, Janata Nagar, Saravanampatti',
-                  orderPlaced:
-                      'Placed 23 minutes ago (3:45 PM, 28th July 2019)',
-                  statusOfDelivery: 'SENT FOR DELIVERY',
-                  deliveryIncharge:
-                      'Delivery in-charge: Mr. Sivaram (9977875623)'),
+                order: temporaryModel,
+              ),
             ),
             Container(
               height: 24,

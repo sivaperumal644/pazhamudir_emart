@@ -22,7 +22,7 @@ const String STRING_CANCELLED_BY_STORE = 'CANCELLED BY STORE';
 const String STRING_CANCELLED_BY_CUST = 'CANCELLED BY CUSTOMER';
 
 class StringResolver {
-  static String getTextForOrderStatus({String status}) {
+  static String getTextForOrderStatus(String status) {
     switch (status) {
       case OrderStatuses.CANCELLED_BY_CUST:
         {

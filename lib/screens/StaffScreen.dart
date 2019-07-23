@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/components/StaffDetailsCard.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'EditMemberScreen.dart';
 
 class StaffScreen extends StatelessWidget {
+  StaffModel temporaryStaff = StaffModel(
+      accountType: 'DELIVERY_EXECUTIVE',
+      name: 'Sivaram',
+      phoneNumber: '444444444',
+      token: 'E45ERT',
+      isActive: true,
+      status: 'DEAD',
+      id: '232345');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +42,14 @@ class StaffScreen extends StatelessWidget {
                             fontFamily: 'RaleWay',
                             fontWeight: FontWeight.bold)),
                     OutlineButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditMemberDetailsScreen(
+                                      isNewEntry: true,
+                                    )));
+                      },
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(12.0)),
                       child: Text(
@@ -47,36 +64,28 @@ class StaffScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 20.0, bottom: 5.0),
                 child: StaffDetailsCard(
-                  staffName: 'Mr. Siva, 9988776677',
-                  staffRole: 'DELIVERY EXECUTIVE',
-                  token: 'Sign in Token: PER8817A',
+                  staff: temporaryStaff,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                 child: StaffDetailsCard(
-                  staffName: 'Mr. Siva, 9988776677',
-                  staffRole: 'DELIVERY EXECUTIVE',
-                  token: 'Sign in Token: PER8817A',
+                  staff: temporaryStaff,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                 child: StaffDetailsCard(
-                  staffName: 'Mr. Siva, 9988776677',
-                  staffRole: 'DELIVERY EXECUTIVE',
-                  token: 'Sign in Token: PER8817A',
+                  staff: temporaryStaff,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                 child: StaffDetailsCard(
-                  staffName: 'Mr. Siva, 9988776677',
-                  staffRole: 'DELIVERY EXECUTIVE',
-                  token: 'Sign in Token: PER8817A',
+                  staff: temporaryStaff,
                 ),
               )
             ],

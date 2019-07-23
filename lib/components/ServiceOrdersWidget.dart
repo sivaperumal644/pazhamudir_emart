@@ -1,29 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/strings.dart';
+import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 
 class ServiceOrdersWidget extends StatelessWidget {
-  String orderNumber;
-  String price;
-  String address;
-  String orderPlaced;
-  String statusOfDelivery;
-  String deliveryIncharge;
+  final OrderModel order;
   ServiceOrdersWidget({
     Key key,
-    String orderNumber,
-    String price,
-    String address,
-    String orderPlaced,
-    String statusOfDelivery,
-    String deliveryIncharge,
-  }) : super(key: key) {
-    this.orderNumber = orderNumber;
-    this.price = price;
-    this.address = address;
-    this.orderPlaced = orderPlaced;
-    this.statusOfDelivery = statusOfDelivery;
-    this.deliveryIncharge = deliveryIncharge;
-  }
+    this.order,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +24,14 @@ class ServiceOrdersWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                orderNumber,
+                '#${order.orderNo}',
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                price,
+                'Rs. ${order.getTotalPrice().toString()}',
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
@@ -57,7 +42,7 @@ class ServiceOrdersWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              address,
+              order.address.toString(),
               textAlign: TextAlign.start,
               style: TextStyle(fontSize: 12),
             ),
@@ -65,14 +50,14 @@ class ServiceOrdersWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Text(
-              orderPlaced,
+              order.datePlaced.toString(),
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24.0),
             child: Text(
-              statusOfDelivery,
+              StringResolver.getTextForOrderStatus(order.status),
               textAlign: TextAlign.start,
               style: TextStyle(
                   fontSize: 12,
@@ -86,7 +71,7 @@ class ServiceOrdersWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  deliveryIncharge,
+                  'Delivery staff assigned: ${order.staff.name} (${order.staff.phoneNumber})',
                   style: TextStyle(fontSize: 12),
                 ),
               ),

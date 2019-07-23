@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:pazhamuthir_emart_service/screens/EditMemberScreen.dart';
 
 class StaffDetailsCard extends StatelessWidget {
-  String staffName;
-  String staffRole;
-  String token;
-  StaffDetailsCard({Key key, String staffName, String staffRole, String token})
-      : super(key: key) {
-    this.staffName = staffName;
-    this.staffRole = staffRole;
-    this.token = token;
-  }
+  final StaffModel staff;
+  StaffDetailsCard({Key key, this.staff}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +15,9 @@ class StaffDetailsCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditMemberDetailsScreen()));
+                  builder: (context) => EditMemberDetailsScreen(
+                        staff: staff,
+                      )));
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -32,7 +28,7 @@ class StaffDetailsCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    staffName,
+                    '${staff.name}',
                     style: TextStyle(
                         fontFamily: 'Raleway',
                         color: BLACK_COLOR,
@@ -45,7 +41,7 @@ class StaffDetailsCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
-                  staffRole,
+                  '${staff.accountType}',
                   style: TextStyle(
                       fontSize: 14,
                       color: GREEN_COLOR,
@@ -55,7 +51,7 @@ class StaffDetailsCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Text(
-                  token,
+                  'Token: ${staff.token}',
                   style: TextStyle(color: BLACK_COLOR, fontSize: 14),
                 ),
               )

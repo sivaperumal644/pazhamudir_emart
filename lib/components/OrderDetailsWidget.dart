@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/styles.dart';
+import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,10 +39,8 @@ class OrderDetailsWidget extends StatelessWidget {
         Container(
           height: 8,
         ),
-        new OrderItemListItemWidget(),
-        new OrderItemListItemWidget(),
-        new OrderItemListItemWidget(),
-        orderItemTotal(),
+        ...buildCartItemsList(),
+        orderItemTotal(order.getTotalPrice()),
         Container(
           height: 24,
         ),
@@ -95,7 +94,7 @@ class OrderDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget orderItemTotal() {
+  Widget orderItemTotal(double totalPrice) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
@@ -105,10 +104,20 @@ class OrderDetailsWidget extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Spacer(),
-          Text('Rs. 2450', style: TextStyle(fontWeight: FontWeight.bold))
+          Text('Rs. $totalPrice', style: TextStyle(fontWeight: FontWeight.bold))
         ],
       ),
     );
+  }
+
+  List<Widget> buildCartItemsList() {
+    List<Widget> widgets = [];
+    order.cartItems.forEach((item) {
+      widgets.add(OrderItemListItemWidget(
+        item: item,
+      ));
+    });
+    return widgets;
   }
 }
 
@@ -152,8 +161,10 @@ class AddressItemWidget extends StatelessWidget {
 }
 
 class OrderItemListItemWidget extends StatelessWidget {
+  final CartItemModel item;
   const OrderItemListItemWidget({
     Key key,
+    this.item,
   }) : super(key: key);
 
   @override
@@ -161,7 +172,11 @@ class OrderItemListItemWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
-        children: <Widget>[Text('Carrot'), Spacer(), Text('Rs. 450')],
+        children: <Widget>[
+          Text('${item.name}'),
+          Spacer(),
+          Text('Rs. ${item.price}')
+        ],
       ),
     );
   }

@@ -1,10 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/components/AppTitleWidget.dart';
 import 'package:pazhamuthir_emart_service/components/DetailsTextField.dart';
 import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/createStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
+import 'package:provider/provider.dart';
+import 'dart:math';
 
-class EditMemberDetailsScreen extends StatelessWidget {
+import '../appState.dart';
+
+class EditMemberDetailsScreen extends StatefulWidget {
+  final StaffModel staff;
+  final bool isNewEntry;
+  const EditMemberDetailsScreen({Key key, this.staff, this.isNewEntry = false})
+      : super(key: key);
+
+  @override
+  _EditMemberDetailsScreenState createState() =>
+      _EditMemberDetailsScreenState();
+}
+
+class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
+  TextEditingController nameController, phoneNumberController;
+  String tokenOnEdit;
+  String accountTypeOnEdit;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isNewEntry == false) {
+      nameController = TextEditingController(text: widget.staff.name);
+      phoneNumberController =
+          TextEditingController(text: widget.staff.phoneNumber);
+      tokenOnEdit = widget.staff.token;
+      accountTypeOnEdit = widget.staff.accountType;
+    } else {
+      nameController = TextEditingController();
+      phoneNumberController = TextEditingController();
+      tokenOnEdit = '';
+      accountTypeOnEdit = 'DELIVERY_EXECUTIVE';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,16 +52,23 @@ class EditMemberDetailsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: AppTitleWidget(
-              title: "Edit Staff Detail",
+              title: widget.isNewEntry ? 'Add new staff' : "Edit Staff Detail",
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 10.0),
-            child: DetailsTextField(inputText: 'Name'),
+            child: DetailsTextField(
+              inputText: 'Name',
+              controller: nameController,
+              onTextChanged: generateToken,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 10.0),
-            child: DetailsTextField(inputText: 'Phone Number'),
+            child: DetailsTextField(
+              inputText: 'Phone Number',
+              controller: phoneNumberController,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16.0, top: 24.0),
@@ -32,10 +77,14 @@ class EditMemberDetailsScreen extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Radio(
-                      groupValue: 1,
-                      value: 1,
+                      groupValue: accountTypeOnEdit,
+                      value: 'DELIVERY_EXECUTIVE',
                       activeColor: PRIMARY_COLOR,
-                      onChanged: (int value) {},
+                      onChanged: (String value) {
+                        setState(() {
+                          accountTypeOnEdit = value;
+                        });
+                      },
                     ),
                     Text(
                       'Delivery Executive',
@@ -46,10 +95,14 @@ class EditMemberDetailsScreen extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Radio(
-                      groupValue: 1,
-                      value: 0,
+                      groupValue: accountTypeOnEdit,
+                      value: 'SHOP_ADMIN',
                       activeColor: PRIMARY_COLOR,
-                      onChanged: (int value) {},
+                      onChanged: (String value) {
+                        setState(() {
+                          accountTypeOnEdit = value;
+                        });
+                      },
                     ),
                     Text(
                       'Shop Admin',
@@ -70,6 +123,7 @@ class EditMemberDetailsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 14),
                 ),
                 OutlineButton(
+                  onPressed: generateToken,
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(12.0)),
                   child: Text(
@@ -83,7 +137,7 @@ class EditMemberDetailsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 32.0),
             child: Text(
-              'PER8867R',
+              '$tokenOnEdit',
               style: TextStyle(fontSize: 24),
             ),
           ),
@@ -101,14 +155,53 @@ class EditMemberDetailsScreen extends StatelessWidget {
                     style: TextStyle(color: RED_COLOR),
                   ),
                 ),
-                SecondaryButtonWidget(
-                  buttonText: 'SAVE CHANGES',
-                )
+                createStaffMutationComponent()
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  void generateToken() {
+    setState(() {
+      if (nameController.text.isEmpty) {
+        return '';
+      }
+      String temp = nameController.text.toUpperCase().replaceAll(' ', '');
+      temp = '${temp}ABCDE';
+      tokenOnEdit =
+          '${temp.substring(0, 5)}${(Random().nextInt(10) + 1) * 12 + 10}';
+    });
+  }
+
+  Widget createStaffMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: createStaffMutation,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      onCompleted: (result) {
+        print('MUTARESULT $result');
+      },
+      builder: (runMutation, result) {
+        return SecondaryButtonWidget(
+          buttonText: 'SAVE CHANGES',
+          onPressed: () {
+            runMutation({
+              'name': nameController.text,
+              'phoneNumber': phoneNumberController.text,
+              'token': tokenOnEdit
+            });
+          },
+        );
+      },
     );
   }
 }
