@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/appState.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/appState.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {

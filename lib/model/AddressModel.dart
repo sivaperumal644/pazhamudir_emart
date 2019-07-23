@@ -13,4 +13,9 @@ class AddressModel {
         landmark: json['landmark'],
         phoneNumber: json['phoneNumber']);
   }
+
+  @override
+  String toString() {
+    return '$name ($phoneNumber),\n$addressLine,\nLandmark: $landmark';
+  }
 }

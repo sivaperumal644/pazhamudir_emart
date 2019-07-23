@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart/components/AppTitleWidget.dart';
-import 'package:pazhamuthir_emart/components/DetailsTextField.dart';
-import 'package:pazhamuthir_emart/components/SecondaryButtonWidget.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/components/AppTitleWidget.dart';
+import 'package:pazhamuthir_emart_service/components/DetailsTextField.dart';
+import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
 
 class EditMemberDetailsScreen extends StatelessWidget {
   @override

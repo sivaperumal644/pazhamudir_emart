@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/screens/EditMemberScreen.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/screens/EditMemberScreen.dart';
 
 class StaffDetailsCard extends StatelessWidget {
   String staffName;

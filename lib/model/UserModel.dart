@@ -1,4 +1,4 @@
-import 'package:pazhamuthir_emart/model/AddressModel.dart';
+import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
 
 class UserModel {
   final String id;

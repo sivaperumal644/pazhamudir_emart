@@ -1,4 +1,4 @@
-package com.example.pazhamuthir_emart;
+package com.example.pazhamuthir_emart_service;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

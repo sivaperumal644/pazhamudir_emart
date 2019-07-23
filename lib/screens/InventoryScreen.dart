@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart/appState.dart';
-import 'package:pazhamuthir_emart/components/InventoryListItemWidget.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/components/SearchWidget.dart';
-import 'package:pazhamuthir_emart/constants/graphql/allInventory_graphql.dart';
-import 'package:pazhamuthir_emart/model/InventoryItemModel.dart';
-import 'package:pazhamuthir_emart/components/ItemModalBottomSheet.dart';
+import 'package:pazhamuthir_emart_service/appState.dart';
+import 'package:pazhamuthir_emart_service/components/InventoryListItemWidget.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/components/SearchWidget.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/allInventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
+import 'package:pazhamuthir_emart_service/components/ItemModalBottomSheet.dart';
 import 'package:provider/provider.dart';
 
 class InventoryScreen extends StatefulWidget {

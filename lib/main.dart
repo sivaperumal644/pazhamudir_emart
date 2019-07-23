@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart/screens/home_screen.dart';
+import 'package:pazhamuthir_emart_service/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'appState.dart';
 import 'screens/auth_screen.dart';

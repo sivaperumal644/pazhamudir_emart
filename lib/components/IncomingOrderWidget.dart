@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/constants/styles.dart';
-import 'package:pazhamuthir_emart/model/OrderModel.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 
 class IncomingOrderWidget extends StatelessWidget {
   final OrderModel order;
@@ -23,14 +22,14 @@ class IncomingOrderWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                order.orderNo,
+                '#${order.orderNo} (${order.cartItems.length} items)',
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                order.,
+                'Rs. ${order.getTotalPrice().toString()}',
                 style: TextStyle(
                     fontSize: 14,
                     color: BLACK_COLOR,
@@ -46,10 +45,10 @@ class IncomingOrderWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  address,
+                  order.address.toString(),
                   softWrap: true,
                   textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 14),
                 ),
               ),
             ],
@@ -61,7 +60,7 @@ class IncomingOrderWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
-                    orderPlaced,
+                    order.datePlaced.toString(),
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   ),
                 ),

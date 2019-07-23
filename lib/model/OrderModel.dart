@@ -1,8 +1,6 @@
-import 'package:pazhamuthir_emart/model/AddressModel.dart';
-import 'package:pazhamuthir_emart/model/CartItemModel.dart';
-import 'package:pazhamuthir_emart/model/StaffModel.dart';
-
-
+import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
+import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 
 class OrderModel {
   final String id;
@@ -36,5 +34,13 @@ class OrderModel {
         datePlaced: DateTime.parse(json['datePlaced']),
         updatedDate: DateTime.parse(json['updatedDate']),
         staff: StaffModel.fromJson(json['staff']));
+  }
+
+  double getTotalPrice() {
+    double price = 0;
+    cartItems.forEach((item) {
+      price += item.price;
+    });
+    return price;
   }
 }

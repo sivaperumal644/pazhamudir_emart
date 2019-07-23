@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/constants/styles.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/styles.dart';
+import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetailsWidget extends StatelessWidget {
+  final OrderModel order;
+
+  const OrderDetailsWidget({Key key, this.order}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,7 +22,7 @@ class OrderDetailsWidget extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              'Rs. 5670',
+              'Rs. ${order.getTotalPrice()}',
               style: RaleWayTitle.copyWith(color: Colors.green),
             )
           ],
@@ -48,13 +53,28 @@ class OrderDetailsWidget extends StatelessWidget {
         Container(
           height: 8,
         ),
-        new AddressItemWidget(),
-        new AddressItemWidget(),
-        new AddressItemWidget(),
+        new AddressItemWidget(
+          title: 'Customer Name',
+          value: order.address.name,
+        ),
+        new AddressItemWidget(
+          title: 'Contact No.',
+          value: order.address.phoneNumber,
+        ),
+        new AddressItemWidget(
+          title: 'Address',
+          value: order.address.addressLine,
+        ),
+        AddressItemWidget(
+          title: 'Landmark',
+          value: order.address.landmark,
+        ),
         Row(
           children: <Widget>[
             OutlineButton(
-              onPressed: (){},
+              onPressed: () {
+                launch('tel://${order.address.phoneNumber}');
+              },
               shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(12.0)),
               child: Text(
@@ -93,8 +113,12 @@ class OrderDetailsWidget extends StatelessWidget {
 }
 
 class AddressItemWidget extends StatelessWidget {
+  final String title;
+  final String value;
   const AddressItemWidget({
     Key key,
+    this.title,
+    this.value,
   }) : super(key: key);
 
   @override
@@ -105,14 +129,20 @@ class AddressItemWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Deliver to:',
+            '$title:',
             textAlign: TextAlign.start,
           ),
           Spacer(),
           Expanded(
-            child: Text(
-              '10/567, Madalayam Road, Janata Nagar, Saravanampatti PO',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                '$value',
+                textAlign: TextAlign.right,
+                softWrap: true,
+                overflow: TextOverflow.visible,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           )
         ],

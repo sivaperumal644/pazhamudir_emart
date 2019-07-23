@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/screens/ShopDetailsScreens.dart';
-import 'package:pazhamuthir_emart/screens/StaffScreen.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/screens/ShopDetailsScreens.dart';
+import 'package:pazhamuthir_emart_service/screens/StaffScreen.dart';
 
 class Navigation extends StatelessWidget {
   @override

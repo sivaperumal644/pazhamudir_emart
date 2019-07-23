@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'home_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart/constants/graphql/auth_graphql.dart';
-import 'package:pazhamuthir_emart/model/StaffModel.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/auth_graphql.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthScreen extends StatefulWidget {

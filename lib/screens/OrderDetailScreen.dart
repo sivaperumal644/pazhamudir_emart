@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:pazhamuthir_emart/components/OrderDetailsWidget.dart';
-import 'package:pazhamuthir_emart/components/PrimaryButtonWidget.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/components/OrderDetailsWidget.dart';
+import 'package:pazhamuthir_emart_service/components/PrimaryButtonWidget.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 
-class OrderDetailScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return OrderDetailScreenState();
-  }
-}
+class OrderDetailScreen extends StatelessWidget {
+  final OrderModel order;
 
-class OrderDetailScreenState extends State<OrderDetailScreen> {
+  OrderDetailScreen({this.order});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +18,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         iconTheme: IconThemeData(color: BLACK_COLOR),
         backgroundColor: WHITE_COLOR,
         title: Text(
-          'Order 7439',
+          'Order ${order.orderNo}',
           style: TextStyle(color: BLACK_COLOR),
         ),
       ),
@@ -41,7 +38,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         fontFamily: 'Raleway',
                         fontWeight: FontWeight.bold),
                   ),
-                  Text('#3459',
+                  Text('#${order.orderNo}',
                       style: TextStyle(
                           color: GREY_COLOR,
                           fontSize: 24,
@@ -52,13 +49,19 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: OrderDetailsWidget(),
+              child: OrderDetailsWidget(
+                order: order,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 20.0, top: 20.0),
               child: Text(
                 'REJECT THIS ORDER',
-                style: TextStyle(fontSize: 14, color: RED_COLOR),
+                style: TextStyle(
+                    fontSize: 14,
+                    color: RED_COLOR,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.4),
               ),
             ),
             PrimaryButtonWidget(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/components/IncomingOrderWidget.dart';
-import 'package:pazhamuthir_emart/components/ServiceOrdersWidget.dart';
-import 'package:pazhamuthir_emart/screens/OrderDetailScreen.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/components/IncomingOrderWidget.dart';
+import 'package:pazhamuthir_emart_service/components/ServiceOrdersWidget.dart';
+import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
+import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
+import 'package:pazhamuthir_emart_service/screens/OrderDetailScreen.dart';
+import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -12,6 +15,20 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class OrdersScreenState extends State<OrdersScreen> {
+  OrderModel temporaryModel = OrderModel(
+      id: 'SDE2424',
+      address: AddressModel(
+          name: 'Vineesh',
+          addressLine:
+              'EEEWE Street, 23 Avenue, Parkour Road, Winner Winner Chicken Dinner Nagar Uwu',
+          landmark: 'Behind Building',
+          phoneNumber: '8899889988'),
+      orderNo: '33423',
+      datePlaced: DateTime.now(),
+      cartItems: [
+        CartItemModel(name: 'Apple', perUnitPrice: 30, unit: 'kg', price: 300)
+      ]);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,15 +55,12 @@ class OrdersScreenState extends State<OrdersScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => OrderDetailScreen()));
+                            builder: (context) => OrderDetailScreen(
+                                  order: temporaryModel,
+                                )));
                   },
                   child: IncomingOrderWidget(
-                    orderNumber: '#3459 (15 items)',
-                    price: 'Rs. 5670',
-                    address:
-                        'Mr. Vineesh, 10/672, Janata Nagar, Saravanampatti',
-                    orderPlaced:
-                        'Placed 23 minutes ago (3:45 PM, 28th July 2019)',
+                    order: temporaryModel,
                   ),
                 )),
             Padding(

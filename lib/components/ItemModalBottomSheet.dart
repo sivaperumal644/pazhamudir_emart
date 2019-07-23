@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart/constants/colors.dart';
-import 'package:pazhamuthir_emart/constants/graphql/new_inventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
-import 'package:pazhamuthir_emart/appState.dart';
+import 'package:pazhamuthir_emart_service/appState.dart';
 
 class ItemModalBottomSheet extends StatefulWidget {
   String nameInput;
@@ -42,7 +42,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
     "category": "",
     "price": "",
     "inStock": "",
-    "unit": ""
+    "unit": "kg"
   };
 
   @override
@@ -60,6 +60,9 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
           //   child:
           ListView(
         children: <Widget>[
+          Container(
+            height: 16,
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
@@ -176,10 +179,15 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Price per kg',
+                  "Price per ${input['unit'] == 'kg' ? 'kg' : 'unit'}",
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(context, 'Rupees/kg', 3, 'price')
+                itemTextField(
+                    context,
+                    'Rupees/${input['unit'] == 'kg' ? 'kg' : 'unit'}',
+                    3,
+                    'price',
+                    isNumeric: true)
               ],
             ),
           ),
@@ -192,27 +200,9 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                   'Quantity in stock',
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(context, 'kg', 5, 'inStock'),
-                Container(
-                  height: 38,
-                  width: 38,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: GREY_COLOR, width: 1)),
-                  child: Icon(
-                    Icons.remove,
-                  ),
-                ),
-                Container(
-                  height: 38,
-                  width: 38,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: GREY_COLOR, width: 1)),
-                  child: Icon(
-                    Icons.add,
-                  ),
-                ),
+                itemTextField(context,
+                    '${input['unit'] == 'kg' ? 'kg' : 'unit'}', 3, 'inStock',
+                    isNumeric: true),
               ],
             ),
           ),
@@ -262,7 +252,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
     );
   }
 
-  Container itemTextField(BuildContext context, inputText, width, String type) {
+  Container itemTextField(BuildContext context, inputText, width, String type,
+      {bool isNumeric = false}) {
     return Container(
         height: 50,
         width: MediaQuery.of(context).size.width / width,
@@ -270,6 +261,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TextField(
+              keyboardType:
+                  isNumeric ? TextInputType.phone : TextInputType.text,
               onChanged: (val) {
                 setState(() {
                   input[type] = val;
