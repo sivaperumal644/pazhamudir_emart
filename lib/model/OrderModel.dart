@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
 import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
@@ -23,17 +25,19 @@ class OrderModel {
       this.staff});
 
   factory OrderModel.fromJson(Map<dynamic, dynamic> json) {
-    List cartItems = json['cartItems'];
+    List cartItems = jsonDecode(json['cartItems']);
     return OrderModel(
-        id: json['id'],
-        orderNo: json['orderNo'],
-        address: AddressModel.fromJson(json['address']),
-        cartItems:
-            cartItems.map((item) => CartItemModel.fromJson(item)).toList(),
-        status: json['status'],
-        datePlaced: DateTime.parse(json['datePlaced']),
-        updatedDate: DateTime.parse(json['updatedDate']),
-        staff: StaffModel.fromJson(json['staff']));
+      id: json['id'],
+      orderNo: json['orderNo'],
+      address: AddressModel.fromJson(jsonDecode(json['address'])),
+      cartItems: cartItems.map((item) => CartItemModel.fromJson(item)).toList(),
+      // status: json['status'],
+      datePlaced:
+          DateTime.fromMicrosecondsSinceEpoch(int.parse(json['datePlaced'])),
+      updatedDate:
+          DateTime.fromMicrosecondsSinceEpoch(int.parse(json['updatedDate'])),
+      staff: json['staff'] != null ? StaffModel.fromJson(json['staff']) : null,
+    );
   }
 
   double getTotalPrice() {

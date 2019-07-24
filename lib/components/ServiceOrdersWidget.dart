@@ -71,7 +71,7 @@ class ServiceOrdersWidget extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  'Delivery staff assigned: ${order.staff.name} (${order.staff.phoneNumber})',
+                  'Delivery staff assigned: ${order.staff?.name} (${order.staff?.phoneNumber})',
                   style: TextStyle(fontSize: 12),
                 ),
               ),

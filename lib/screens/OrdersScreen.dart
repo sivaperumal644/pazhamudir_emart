@@ -34,15 +34,12 @@ class OrdersScreenState extends State<OrdersScreen> {
           phoneNumber: '8899889988'),
       orderNo: '33423',
       datePlaced: DateTime.now(),
-      cartItems: [
-        CartItemModel(name: 'Apple', perUnitPrice: 30, unit: 'kg', price: 300)
-      ]);
+      cartItems: [CartItemModel(name: 'Apple', unit: 'kg', price: 300)]);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 32.0, left: 20.0),
@@ -55,61 +52,82 @@ class OrdersScreenState extends State<OrdersScreen> {
                   letterSpacing: 1.0),
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => OrderDetailScreen(
-                                order: temporaryModel,
-                              )));
-                },
-                child: IncomingOrderWidget(
-                  order: temporaryModel,
-                ),
-              )),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, left: 20.0),
-            child: Text(
-              'ORDERS UNDER SERVICE',
-              style: TextStyle(
-                  color: BLACK_COLOR,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  letterSpacing: 1.0),
-            ),
-          ),
-          serviceOrderWidget(),
-          Container(
-            height: 24,
-          ),
-          Center(
-              child: FlatButton(
-                  onPressed: () {},
-                  child: Text(
-                    'VIEW ORDER HISTORY',
-                    style: TextStyle(
-                        color: BLACK_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.0),
-                  ))),
-          Container(
-            height: 24,
-          )
+          getAllOrderQueryComponent()
+          //orderListComponent()
+          // Padding(
+          //     padding: const EdgeInsets.all(20.0),
+          //     child: InkWell(
+          //       borderRadius: BorderRadius.circular(12),
+          //       onTap: () {
+          //         Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => OrderDetailScreen(
+          //                       order: temporaryModel,
+          //                     )));
+          //       },
+          //       child: IncomingOrderWidget(
+          //         order: temporaryModel,
+          //       ),
+          //     )),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 16.0, left: 20.0),
+          //   child: Text(
+          //     'ORDERS UNDER SERVICE',
+          //     style: TextStyle(
+          //         color: BLACK_COLOR,
+          //         fontWeight: FontWeight.bold,
+          //         fontSize: 14,
+          //         letterSpacing: 1.0),
+          //   ),
+          // ),
+          // serviceOrderWidget(),
+          // Container(
+          //   height: 24,
+          // ),
+          // Center(
+          //     child: FlatButton(
+          //         onPressed: () {},
+          //         child: Text(
+          //           'VIEW ORDER HISTORY',
+          //           style: TextStyle(
+          //               color: BLACK_COLOR,
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w500,
+          //               letterSpacing: 1.0),
+          //         ))),
+          // Container(
+          //   height: 24,
+          // )
         ],
       ),
     );
   }
 
-  Padding serviceOrderWidget() {
+  ListView orderListComponent(List<OrderModel> orders) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
+      itemCount: orders.length,
+      itemBuilder: (context, index) => serviceOrderWidget(orders[index]),
+    );
+  }
+
+  Padding serviceOrderWidget(OrderModel order) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      child: ServiceOrdersWidget(
-        order: temporaryModel,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OrderDetailScreen(
+                        order: order,
+                      )));
+        },
+        child: ServiceOrdersWidget(
+          order: order,
+        ),
       ),
     );
   }
@@ -124,9 +142,10 @@ class OrdersScreenState extends State<OrdersScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 10,
+        pollInterval: 30,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
+        print(result.errors);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
@@ -134,9 +153,7 @@ class OrdersScreenState extends State<OrdersScreen> {
           List orderList = result.data['getAllOrders']['orders'];
           final orders =
               orderList.map((item) => OrderModel.fromJson(item)).toList();
-          return Container(
-            margin: EdgeInsets.only(top: 100),
-          );
+          return orderListComponent(orders);
         }
         return Container();
       },

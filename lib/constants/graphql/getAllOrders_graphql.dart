@@ -5,14 +5,7 @@ query GetAllOrders{
       id,
       orderNo,
       address,
-      cartItems{
-        id,
-        name,
-        category,
-        price,
-        quantity,
-        perUnitPrice
-      }
+      cartItems,
       status,
       datePlaced,
       updatedDate,
