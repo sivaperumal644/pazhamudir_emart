@@ -154,7 +154,6 @@ class AuthScreenState extends State<AuthScreen> {
                 child: RaisedButton(
                   color: WHITE_COLOR,
                   onPressed: () {
-                    print(tokenInput);
                     runmutation({'token': tokenInput});
                   },
                   shape: RoundedRectangleBorder(
@@ -183,14 +182,12 @@ class AuthScreenState extends State<AuthScreen> {
         RunMutation runMutation,
         QueryResult result,
       ) {
-        print(result.errors);
         return _signinButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;
       },
       onCompleted: (dynamic resultData) async {
-        print(resultData.toString());
         final prefs = await SharedPreferences.getInstance();
         if (resultData != null && resultData['staffLogin']['error'] == null) {
           final user = StaffModel.fromJson(resultData['staffLogin']['user']);

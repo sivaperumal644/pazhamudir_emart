@@ -57,6 +57,7 @@ class Navigation extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ListTile(
+                onTap: (){},
                 title: Text(
                   'INVENTORY',
                   style: TextStyle(fontSize: 16, color: WHITE_COLOR),

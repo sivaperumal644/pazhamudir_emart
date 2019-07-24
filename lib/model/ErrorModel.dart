@@ -4,7 +4,6 @@ class ErrorModel {
 
   ErrorModel({this.path, this.message}) {
     if (path.isEmpty && message.isEmpty) return;
-    print("**** SERVER RETURNED ERROR $path ****");
     throw Exception('$path - $message');
   }
 

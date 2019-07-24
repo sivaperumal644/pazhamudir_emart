@@ -5,6 +5,7 @@ import 'package:pazhamuthir_emart_service/components/DetailsTextField.dart';
 import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/createStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -155,7 +156,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
                     style: TextStyle(color: RED_COLOR),
                   ),
                 ),
-                createStaffMutationComponent()
+                widget.isNewEntry ? createStaffMutationComponent() : updateStaffMutationComponent()
               ],
             ),
           )
@@ -187,9 +188,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
           },
         },
       ),
-      onCompleted: (result) {
-        print('MUTARESULT $result');
-      },
+      onCompleted: (result) {},
       builder: (runMutation, result) {
         return SecondaryButtonWidget(
           buttonText: 'SAVE CHANGES',
@@ -197,8 +196,39 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             runMutation({
               'name': nameController.text,
               'phoneNumber': phoneNumberController.text,
+              'accountType': accountTypeOnEdit,
               'token': tokenOnEdit
             });
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
+  Widget updateStaffMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: updateStaffMutation,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      onCompleted: (result) {},
+      builder: (runMutation, result) {
+        return SecondaryButtonWidget(
+          buttonText: 'SAVE CHANGES',
+          onPressed: () {
+            runMutation({
+              'name': nameController.text,
+              'phoneNumber': phoneNumberController.text,
+              'accountType': accountTypeOnEdit,
+              'token': tokenOnEdit
+            });
+            Navigator.pop(context);
           },
         );
       },

@@ -215,7 +215,6 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
 
   Widget inventoryMutationComponent() {
     final appState = Provider.of<AppState>(context);
-    print(appState.getJwtToken);
     return Mutation(
       options: MutationOptions(document: newInventoryMutation, context: {
         'headers': <String, String>{
@@ -223,14 +222,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         },
       }),
       builder: (runMutation, result) {
-        print(result.errors);
         return saveChangesButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print(resultData.toString());
       },
     );
   }
