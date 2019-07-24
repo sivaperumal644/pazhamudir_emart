@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:provider/provider.dart';
+import '../appState.dart';
 import 'home_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/auth_graphql.dart';
@@ -174,6 +176,7 @@ class AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _mutationComponent() {
+    final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
         document: signInMutation,
@@ -191,9 +194,11 @@ class AuthScreenState extends State<AuthScreen> {
         final prefs = await SharedPreferences.getInstance();
         if (resultData != null && resultData['staffLogin']['error'] == null) {
           final user = StaffModel.fromJson(resultData['staffLogin']['user']);
+          appState.setUserName(user.name);
           if (user != null) {
             await prefs.setString(
                 'token', resultData['staffLogin']['jwtToken']);
+            await prefs.setString('name', user.name);    
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),

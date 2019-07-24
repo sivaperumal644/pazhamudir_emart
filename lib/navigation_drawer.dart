@@ -3,10 +3,16 @@ import 'package:flutter/rendering.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/screens/ShopDetailsScreens.dart';
 import 'package:pazhamuthir_emart_service/screens/StaffScreen.dart';
+import 'package:pazhamuthir_emart_service/screens/auth_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'appState.dart';
 
 class Navigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Drawer(
       child: Container(
         color: PRIMARY_COLOR,
@@ -35,7 +41,7 @@ class Navigation extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0),
               child: ListTile(
                 title: Text(
-                  'Hi, Sivaram',
+                  'Hi ' + appState.getUserName,
                   style: TextStyle(color: WHITE_COLOR, fontSize: 24),
                 ),
               ),
@@ -57,7 +63,7 @@ class Navigation extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ListTile(
-                onTap: (){},
+                onTap: () {},
                 title: Text(
                   'INVENTORY',
                   style: TextStyle(fontSize: 16, color: WHITE_COLOR),
@@ -82,14 +88,26 @@ class Navigation extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ListTile(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => StaffScreen()));
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => StaffScreen()));
                 },
                 title: Text(
                   'STAFF',
+                  style: TextStyle(fontSize: 16, color: WHITE_COLOR),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: ListTile(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.clear();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthScreen()));
+                },
+                title: Text(
+                  'LOG OUT',
                   style: TextStyle(fontSize: 16, color: WHITE_COLOR),
                 ),
               ),

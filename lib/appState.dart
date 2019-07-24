@@ -9,6 +9,7 @@ class AppState with ChangeNotifier {
   bool isOrderAccepted = false;
   String jwtToken = "";
   String searchText = "";
+  String userName = "";
 
   void setIsOrderAccepted(bool text) {
     isOrderAccepted = text;
@@ -18,7 +19,9 @@ class AppState with ChangeNotifier {
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();
     final token = pref.getString("token") ?? "";
+    final name = pref.getString("name") ?? "";
     jwtToken = token;
+    userName = name;
   }
 
   void setJwtToken(String text) {
@@ -26,12 +29,18 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSearchText(String text){
+  void setSearchText(String text) {
     searchText = text;
+    notifyListeners();
+  }
+
+  void setUserName(String text) {
+    userName = text;
     notifyListeners();
   }
 
   get getJwtToken => jwtToken;
   get getIsOrderAccepted => isOrderAccepted;
   get getSearchText => searchText;
+  get getUserName => userName;
 }

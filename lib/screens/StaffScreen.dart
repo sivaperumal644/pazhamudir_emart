@@ -67,7 +67,7 @@ class StaffScreen extends StatelessWidget {
               ),
             ],
           ),
-          addStaffQuery(context),
+          getStaffQuery(context),
         ],
       ),
     );
@@ -92,7 +92,7 @@ class StaffScreen extends StatelessWidget {
       );
     }
 
-    Widget addStaffQuery(context) {
+    Widget getStaffQuery(context) {
       final appState = Provider.of<AppState>(context);
       return Query(
         options: QueryOptions(
@@ -102,9 +102,10 @@ class StaffScreen extends StatelessWidget {
               'Authorization': 'Bearer ${appState.getJwtToken}',
             },
           },
-          pollInterval: 10,
+          pollInterval: 3,
         ),
         builder: (QueryResult result, {VoidCallback refetch}) {
+          print(result.errors);
           if (result.loading)
             return Center(child: CupertinoActivityIndicator());
           if (result.hasErrors)

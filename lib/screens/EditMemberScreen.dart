@@ -27,10 +27,13 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
   TextEditingController nameController, phoneNumberController;
   String tokenOnEdit;
   String accountTypeOnEdit;
+  String id;
   @override
   void initState() {
     super.initState();
     if (widget.isNewEntry == false) {
+      id = widget.staff.id;
+      print(id);
       nameController = TextEditingController(text: widget.staff.name);
       phoneNumberController =
           TextEditingController(text: widget.staff.phoneNumber);
@@ -147,16 +150,20 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                OutlineButton(
-                  onPressed: () {},
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(12.0)),
-                  child: Text(
-                    'REMOVE',
-                    style: TextStyle(color: RED_COLOR),
-                  ),
-                ),
-                widget.isNewEntry ? createStaffMutationComponent() : updateStaffMutationComponent()
+                widget.isNewEntry
+                    ? Text('')
+                    : OutlineButton(
+                        onPressed: () {},
+                        shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(12.0)),
+                        child: Text(
+                          'REMOVE',
+                          style: TextStyle(color: RED_COLOR),
+                        ),
+                      ),
+                widget.isNewEntry
+                    ? createStaffMutationComponent('ADD STAFF')
+                    : updateStaffMutationComponent('SAVE CHANGES')
               ],
             ),
           )
@@ -177,7 +184,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
     });
   }
 
-  Widget createStaffMutationComponent() {
+  Widget createStaffMutationComponent(String inputText) {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -191,7 +198,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
       onCompleted: (result) {},
       builder: (runMutation, result) {
         return SecondaryButtonWidget(
-          buttonText: 'SAVE CHANGES',
+          buttonText: inputText,
           onPressed: () {
             runMutation({
               'name': nameController.text,
@@ -206,7 +213,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
     );
   }
 
-  Widget updateStaffMutationComponent() {
+  Widget updateStaffMutationComponent(String inputText) {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -217,18 +224,20 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
           },
         },
       ),
-      onCompleted: (result) {},
+      onCompleted: (result) {
+        Navigator.pop(context);
+      },
       builder: (runMutation, result) {
         return SecondaryButtonWidget(
-          buttonText: 'SAVE CHANGES',
+          buttonText: inputText,
           onPressed: () {
             runMutation({
+              'staffId': id,
               'name': nameController.text,
               'phoneNumber': phoneNumberController.text,
               'accountType': accountTypeOnEdit,
               'token': tokenOnEdit
             });
-            Navigator.pop(context);
           },
         );
       },
