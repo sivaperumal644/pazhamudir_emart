@@ -1,5 +1,11 @@
 /* UI Display Text Strings */
 
+class AccountTypes {
+  static const String GOD_ADMIN = 'GOD_ADMIN';
+  static const String STORE_ADMIN = 'STORE_ADMIN';
+  static const String DELIVERY = 'DELIVERY';
+}
+
 class OrderStatuses {
   static const String PLACED_BY_CUST = 'PLACED_BY_CUSTOMER';
   static const String RECEIVED_BY_STORE = 'RECEIVED_BY_STORE';

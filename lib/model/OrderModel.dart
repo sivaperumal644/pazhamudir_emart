@@ -31,11 +31,11 @@ class OrderModel {
       orderNo: json['orderNo'],
       address: AddressModel.fromJson(jsonDecode(json['address'])),
       cartItems: cartItems.map((item) => CartItemModel.fromJson(item)).toList(),
-      // status: json['status'],
-      datePlaced:
-          DateTime.fromMicrosecondsSinceEpoch(int.parse(json['datePlaced'])*1000),
-      updatedDate:
-          DateTime.fromMicrosecondsSinceEpoch(int.parse(json['updatedDate'])*1000),
+      status: json['status'],
+      datePlaced: DateTime.fromMicrosecondsSinceEpoch(
+          int.parse(json['datePlaced']) * 1000),
+      updatedDate: DateTime.fromMicrosecondsSinceEpoch(
+          int.parse(json['updatedDate']) * 1000),
       staff: json['staff'] != null ? StaffModel.fromJson(json['staff']) : null,
     );
   }

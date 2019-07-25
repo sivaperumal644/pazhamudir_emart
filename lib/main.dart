@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'appState.dart';
 import 'screens/auth_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/HomeScreenDelivery.dart';
 
 main() => runApp(MyApp());
 
@@ -15,6 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isAuthenticated = false;
+  bool isDelivery = false;
 
   @override
   void initState() {
@@ -40,7 +42,9 @@ class _MyAppState extends State<MyApp> {
         child: ChangeNotifierProvider<AppState>(
           builder: (_) => AppState(),
           child: MaterialApp(
-            home: isAuthenticated ? HomeScreen() : AuthScreen(),
+            home: isAuthenticated && isDelivery
+                ? HomeScreenForDelivery()
+                : isAuthenticated ? HomeScreen() : AuthScreen(),
             theme: ThemeData(canvasColor: Colors.transparent),
           ),
         ),
@@ -52,8 +56,10 @@ class _MyAppState extends State<MyApp> {
     //final appState = Provider.of<AppState>(context);
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
+    isDelivery = prefs.getBool('isDelivery') ?? false;
     setState(() {
       isAuthenticated = token != null;
+      isDelivery = isDelivery;
     });
   }
 }

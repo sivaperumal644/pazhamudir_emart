@@ -54,40 +54,6 @@ class Navigation extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ListTile(
-                title: Text(
-                  'ORDERS',
-                  style: TextStyle(fontSize: 16, color: WHITE_COLOR),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: ListTile(
-                onTap: () {},
-                title: Text(
-                  'INVENTORY',
-                  style: TextStyle(fontSize: 16, color: WHITE_COLOR),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: ListTile(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ShopDetailsScreen()));
-                },
-                title: Text(
-                  'SHOP DETAILS',
-                  style: TextStyle(fontSize: 16, color: WHITE_COLOR),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: ListTile(
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => StaffScreen()));
@@ -104,7 +70,8 @@ class Navigation extends StatelessWidget {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthScreen()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => AuthScreen()));
                 },
                 title: Text(
                   'LOG OUT',

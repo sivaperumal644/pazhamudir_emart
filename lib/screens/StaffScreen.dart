@@ -105,7 +105,6 @@ class StaffScreen extends StatelessWidget {
           pollInterval: 3,
         ),
         builder: (QueryResult result, {VoidCallback refetch}) {
-          print(result.errors);
           if (result.loading)
             return Center(child: CupertinoActivityIndicator());
           if (result.hasErrors)

@@ -22,29 +22,17 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class OrdersScreenState extends State<OrdersScreen> {
-  OrderModel temporaryModel = OrderModel(
-      staff: StaffModel(name: 'Sivaram', phoneNumber: '6969696969'),
-      status: OrderStatuses.RECEIVED_BY_STORE,
-      id: 'SDE2424',
-      address: AddressModel(
-          name: 'Vineesh',
-          addressLine:
-              'EEEWE Street, 23 Avenue, Parkour Road, Winner Winner Chicken Dinner Nagar Uwu',
-          landmark: 'Behind Building',
-          phoneNumber: '8899889988'),
-      orderNo: '33423',
-      datePlaced: DateTime.now(),
-      cartItems: [CartItemModel(name: 'Apple', unit: 'kg', price: 300)]);
-
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    bool isDelivery = appState.getIsUserDelivery;
     return Scaffold(
       body: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 32.0, left: 20.0),
             child: Text(
-              'INCOMING NEW ORDERS',
+              isDelivery ? 'ASSIGNED TO YOU' : 'ACTIVE ORDERS',
               style: TextStyle(
                   color: BLACK_COLOR,
                   fontWeight: FontWeight.bold,
@@ -52,7 +40,10 @@ class OrdersScreenState extends State<OrdersScreen> {
                   letterSpacing: 1.0),
             ),
           ),
-          getAllOrderQueryComponent()
+          getAllOrderQueryComponent(),
+          Container(
+            height: 30,
+          )
         ],
       ),
     );
@@ -68,10 +59,12 @@ class OrdersScreenState extends State<OrdersScreen> {
   }
 
   Padding serviceOrderWidget(OrderModel order) {
+    final appState = Provider.of<AppState>(context);
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
       child: InkWell(
         onTap: () {
+          appState.setOrderId(order.id);
           Navigator.push(
               context,
               MaterialPageRoute(
@@ -96,10 +89,9 @@ class OrdersScreenState extends State<OrdersScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 30,
+        pollInterval: 3,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        print(result.errors);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
@@ -107,6 +99,16 @@ class OrdersScreenState extends State<OrdersScreen> {
           List orderList = result.data['getAllOrders']['orders'];
           final orders =
               orderList.map((item) => OrderModel.fromJson(item)).toList();
+          // orders.sort((a,b){
+          //   a.updatedDate.millisecondsSinceEpoch.compareTo(b.updatedDate.millisecondsSinceEpoch);
+          // });
+          print("ALREADY LOGGED IN with id ${appState.deliveryStaffId}");
+          if (appState.getIsUserDelivery) {
+            var filteredList = orders.where((order) {
+              return order.staff?.id == appState.deliveryStaffId;
+            }).toList();
+            return orderListComponent(filteredList);
+          }
           return orderListComponent(orders);
         }
         return Container();

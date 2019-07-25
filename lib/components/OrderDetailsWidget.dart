@@ -5,6 +5,7 @@ import 'package:pazhamuthir_emart_service/constants/styles.dart';
 import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../constants/strings.dart';
 
 class OrderDetailsWidget extends StatelessWidget {
   final OrderModel order;
@@ -87,8 +88,27 @@ class OrderDetailsWidget extends StatelessWidget {
                 'Call the customer',
                 style: TextStyle(fontSize: 14),
               ),
-            )
+            ),
           ],
+        ),
+        Container(
+          height: 24,
+        ),
+        Text(
+          'Current Status',
+          style: RaleWayTitle,
+          textAlign: TextAlign.start,
+        ),
+        Container(
+          height: 8,
+        ),
+        Text(
+          '${StringResolver.getTextForOrderStatus(order.status)}',
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: PRIMARY_COLOR,
+              letterSpacing: 1.4),
         )
       ],
     );

@@ -7,10 +7,23 @@ class AppState with ChangeNotifier {
   }
 
   bool isOrderAccepted = false;
+  bool isUserDelivery = false;
   String jwtToken = "";
   String searchText = "";
   String userName = "";
   String orderId = "";
+  String staffId = '';
+  String deliveryStaffId = "";
+
+  void setIsUserDelivery(bool t) {
+    isUserDelivery = t;
+    notifyListeners();
+  }
+
+  void setStaffId(String s) {
+    staffId = s;
+    notifyListeners();
+  }
 
   void setIsOrderAccepted(bool text) {
     isOrderAccepted = text;
@@ -21,8 +34,11 @@ class AppState with ChangeNotifier {
     final pref = await SharedPreferences.getInstance();
     final token = pref.getString("token") ?? "";
     final name = pref.getString("name") ?? "";
+    final deliveryId = pref.getString("staffId") ?? "";
+    isUserDelivery = pref.getBool('isDelivery') ?? false;
     jwtToken = token;
     userName = name;
+    deliveryStaffId = deliveryId;
   }
 
   void setJwtToken(String text) {
@@ -40,14 +56,16 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  void setOrderId(String text){
+  void setOrderId(String text) {
     orderId = text;
     notifyListeners();
   }
 
   get getJwtToken => jwtToken;
   get getIsOrderAccepted => isOrderAccepted;
+  get getIsUserDelivery => isUserDelivery;
   get getSearchText => searchText;
   get getUserName => userName;
   get getOrderId => orderId;
+  get getStaffId => staffId;
 }

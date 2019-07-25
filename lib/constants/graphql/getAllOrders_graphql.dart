@@ -6,6 +6,16 @@ query GetAllOrders{
       orderNo,
       address,
       cartItems,
+      staff {
+        id
+        name
+        phoneNumber
+        address
+        token
+        isActive
+        status
+        accountType
+      }
       status,
       datePlaced,
       updatedDate,

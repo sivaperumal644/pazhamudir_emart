@@ -8,6 +8,7 @@ import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/assignStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/getAllStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:provider/provider.dart';
 
@@ -85,7 +86,7 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
         physics: ScrollPhysics(),
         itemCount: staffs.length,
         itemBuilder: (context, index) {
-          if (staffs[index].accountType == 'DELIVERY_EXECUTIVE')
+          if (staffs[index].accountType == AccountTypes.DELIVERY)
             return staffWidget(staffs[index]);
           else
             return Container();
@@ -153,7 +154,6 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
         pollInterval: 3,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        print(result.errors);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
@@ -181,8 +181,6 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
         },
       ),
       builder: (runMutation, result) {
-        print("AssignStaff, ${result.data}");
-        print("Assign Error, ${result.errors}");
         return doneButton(runMutation);
       },
       onCompleted: (result) {

@@ -6,6 +6,7 @@ import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart'
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/createStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -33,7 +34,6 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
     super.initState();
     if (widget.isNewEntry == false) {
       id = widget.staff.id;
-      print(id);
       nameController = TextEditingController(text: widget.staff.name);
       phoneNumberController =
           TextEditingController(text: widget.staff.phoneNumber);
@@ -43,7 +43,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
       nameController = TextEditingController();
       phoneNumberController = TextEditingController();
       tokenOnEdit = '';
-      accountTypeOnEdit = 'DELIVERY_EXECUTIVE';
+      accountTypeOnEdit = AccountTypes.DELIVERY;
     }
   }
 
@@ -82,7 +82,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
                   children: <Widget>[
                     Radio(
                       groupValue: accountTypeOnEdit,
-                      value: 'DELIVERY_EXECUTIVE',
+                      value: AccountTypes.DELIVERY,
                       activeColor: PRIMARY_COLOR,
                       onChanged: (String value) {
                         setState(() {
@@ -92,7 +92,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
                     ),
                     Text(
                       'Delivery Executive',
-                      style: TextStyle(fontFamily: 'Ralewar', fontSize: 18),
+                      style: TextStyle(fontFamily: 'Raleway', fontSize: 18),
                     )
                   ],
                 ),
@@ -100,7 +100,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
                   children: <Widget>[
                     Radio(
                       groupValue: accountTypeOnEdit,
-                      value: 'SHOP_ADMIN',
+                      value: AccountTypes.STORE_ADMIN,
                       activeColor: PRIMARY_COLOR,
                       onChanged: (String value) {
                         setState(() {
@@ -110,7 +110,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
                     ),
                     Text(
                       'Shop Admin',
-                      style: TextStyle(fontFamily: 'Ralewar', fontSize: 18),
+                      style: TextStyle(fontFamily: 'Raleway', fontSize: 18),
                     )
                   ],
                 )
@@ -118,7 +118,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 28),
+            padding: const EdgeInsets.only(left: 32.0, right: 28, top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

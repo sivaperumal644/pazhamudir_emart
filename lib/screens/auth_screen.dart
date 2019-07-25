@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:provider/provider.dart';
 import '../appState.dart';
 import 'home_screen.dart';
@@ -9,6 +10,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/auth_graphql.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'HomeScreenDelivery.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -195,14 +197,29 @@ class AuthScreenState extends State<AuthScreen> {
         if (resultData != null && resultData['staffLogin']['error'] == null) {
           final user = StaffModel.fromJson(resultData['staffLogin']['user']);
           appState.setUserName(user.name);
+          appState.setStaffId(user.id);
+          print("ON LOGIN: ${user.id}\nTYPE: ${user.accountType}");
           if (user != null) {
             await prefs.setString(
                 'token', resultData['staffLogin']['jwtToken']);
-            await prefs.setString('name', user.name);    
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
+            await prefs.setString('name', user.name);
+            await prefs.setString('staffId', user.id);
+            await prefs.setBool('isDelivery', false);
+            appState.setIsUserDelivery(false);
+            if (user.accountType == AccountTypes.DELIVERY) {
+              await prefs.setBool('isDelivery', true);
+              appState.setIsUserDelivery(true);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreenForDelivery()),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            }
           }
         }
       },
