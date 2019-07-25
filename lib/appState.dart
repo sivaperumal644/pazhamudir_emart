@@ -10,6 +10,7 @@ class AppState with ChangeNotifier {
   String jwtToken = "";
   String searchText = "";
   String userName = "";
+  String orderId = "";
 
   void setIsOrderAccepted(bool text) {
     isOrderAccepted = text;
@@ -39,8 +40,14 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setOrderId(String text){
+    orderId = text;
+    notifyListeners();
+  }
+
   get getJwtToken => jwtToken;
   get getIsOrderAccepted => isOrderAccepted;
   get getSearchText => searchText;
   get getUserName => userName;
+  get getOrderId => orderId;
 }

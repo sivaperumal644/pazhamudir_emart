@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pazhamuthir_emart_service/appState.dart';
 import 'package:pazhamuthir_emart_service/components/OrderDetailsWidget.dart';
 import 'package:pazhamuthir_emart_service/components/PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/getAllStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
+import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
+import 'package:provider/provider.dart';
+
+import 'AssignStaffScreen.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final OrderModel order;
@@ -12,6 +19,7 @@ class OrderDetailScreen extends StatelessWidget {
   OrderDetailScreen({this.order});
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       appBar: AppBar(
@@ -67,103 +75,20 @@ class OrderDetailScreen extends StatelessWidget {
             PrimaryButtonWidget(
                 buttonText: 'ACCEPT ORDER',
                 onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return StaffModalWidget();
-                      });
+                  appState.setOrderId(order.id);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => StaffModalWidget()));
+                  // showModalBottomSheet(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return StaffModalWidget();
+                  //     });
                 })
           ],
         ),
       ]),
-    );
-  }
-}
-
-class StaffModalWidget extends StatelessWidget {
-  const StaffModalWidget({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      decoration: BoxDecoration(
-          color: WHITE_COLOR,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-      child: ListView(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Assign Staff',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Raleway'),
-            ),
-          ),
-          Text('Please choose the delivery in-charge',
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
-          staffWidget(),
-          staffWidget(),
-          staffWidget(),
-          staffWidget(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SizedBox(
-                  width: double.infinity,
-                  child: PrimaryButtonWidget(
-                    buttonText: 'Done',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Padding staffWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: GREY_COLOR, width: 1)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Kumar (8898976767)',
-                        style: TextStyle(
-                            color: BLACK_COLOR,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold)),
-                    Text('Available',
-                        style: TextStyle(fontSize: 14, color: GREEN_COLOR))
-                  ],
-                ),
-              ),
-              Radio(
-                groupValue: 1,
-                value: 1,
-                activeColor: GREEN_COLOR,
-                onChanged: (int value) {},
-              )
-            ],
-          )),
     );
   }
 }

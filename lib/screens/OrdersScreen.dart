@@ -53,52 +53,6 @@ class OrdersScreenState extends State<OrdersScreen> {
             ),
           ),
           getAllOrderQueryComponent()
-          //orderListComponent()
-          // Padding(
-          //     padding: const EdgeInsets.all(20.0),
-          //     child: InkWell(
-          //       borderRadius: BorderRadius.circular(12),
-          //       onTap: () {
-          //         Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => OrderDetailScreen(
-          //                       order: temporaryModel,
-          //                     )));
-          //       },
-          //       child: IncomingOrderWidget(
-          //         order: temporaryModel,
-          //       ),
-          //     )),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 16.0, left: 20.0),
-          //   child: Text(
-          //     'ORDERS UNDER SERVICE',
-          //     style: TextStyle(
-          //         color: BLACK_COLOR,
-          //         fontWeight: FontWeight.bold,
-          //         fontSize: 14,
-          //         letterSpacing: 1.0),
-          //   ),
-          // ),
-          // serviceOrderWidget(),
-          // Container(
-          //   height: 24,
-          // ),
-          // Center(
-          //     child: FlatButton(
-          //         onPressed: () {},
-          //         child: Text(
-          //           'VIEW ORDER HISTORY',
-          //           style: TextStyle(
-          //               color: BLACK_COLOR,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.w500,
-          //               letterSpacing: 1.0),
-          //         ))),
-          // Container(
-          //   height: 24,
-          // )
         ],
       ),
     );
