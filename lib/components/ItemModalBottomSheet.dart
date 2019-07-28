@@ -2,34 +2,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
 
 class ItemModalBottomSheet extends StatefulWidget {
+  String id;
   String nameInput;
   String categoryInput;
   String unit;
   double priceInput;
   double quantityInput;
   String photoUrl;
+  bool isNewInventory = false;
 
   ItemModalBottomSheet(
       {Key key,
+      String id,
       String nameInput,
       String categoryInput,
       String unit,
       double priceInput,
       double quantityInput,
-      String photoUrl})
+      String photoUrl,
+      bool isNewInventory})
       : super(key: key) {
+    this.id = id;
     this.nameInput = nameInput;
     this.categoryInput = categoryInput;
     this.unit = unit;
     this.priceInput = priceInput;
     this.quantityInput = quantityInput;
     this.photoUrl = photoUrl;
+    this.isNewInventory = isNewInventory;
   }
 
   @override
@@ -49,16 +56,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
-      body:
-          // Container(
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          //   decoration: BoxDecoration(
-          //       color: WHITE_COLOR,
-          //       borderRadius: BorderRadius.only(
-          //           topLeft: Radius.circular(24), topRight: Radius.circular(24))),
-          //   child:
-          ListView(
+      body: ListView(
         children: <Widget>[
           Container(
             height: 16,
@@ -66,7 +64,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Add New Item',
+              widget.isNewInventory ? 'Add New Item' : 'Update Item',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Raleway',
@@ -206,10 +204,20 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               ],
             ),
           ),
-          inventoryMutationComponent()
+          inventoryMutationComponent(),
+          widget.isNewInventory ? Text('') : deleteInventoryMutationComponent()
         ],
       ),
       //),
+    );
+  }
+
+  Widget removeButton(RunMutation runMutation) {
+    return OutlineButton(
+      child: Text('remove'),
+      onPressed: () {
+        runMutation({'inventoryId': widget.id});
+      },
     );
   }
 
@@ -227,14 +235,33 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       update: (Cache cache, QueryResult result) {
         return cache;
       },
+      onCompleted: (dynamic resultData) {},
+    );
+  }
+
+  Widget deleteInventoryMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(document: deleteInventoryMutation, context: {
+        'headers': <String, String>{
+          'Authorization': 'Bearer ${appState.getJwtToken}',
+        },
+      }),
+      builder: (runMutation, result) {
+        return removeButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
       onCompleted: (dynamic resultData) {
+        Navigator.pop(context);
       },
     );
   }
 
   Widget saveChangesButton(RunMutation runMutation) {
     return PrimaryButtonWidget(
-      buttonText: 'SAVE CHANGES',
+      buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
       onPressed: () {
         runMutation({
           'name': input['name'],

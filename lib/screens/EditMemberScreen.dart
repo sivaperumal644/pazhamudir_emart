@@ -264,8 +264,6 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
         Navigator.pop(context);
       },
       builder: (runMutation, result) {
-        print(result.errors);
-        print(result.data);
         return removeButton(runMutation);
       },
     );

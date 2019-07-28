@@ -21,7 +21,8 @@ class AuthScreen extends StatefulWidget {
 
 class AuthScreenState extends State<AuthScreen> {
   String tokenInput = "";
-
+  bool buttonPressed = false;
+  bool invalidToken = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,6 +122,7 @@ class AuthScreenState extends State<AuthScreen> {
         onChanged: (val) {
           setState(() {
             tokenInput = val;
+            invalidToken = false;
           });
         },
         style: TextStyle(
@@ -135,6 +137,7 @@ class AuthScreenState extends State<AuthScreen> {
                 borderSide: BorderSide(color: WHITE_COLOR)),
             border: UnderlineInputBorder(
                 borderSide: BorderSide(color: WHITE_COLOR)),
+            errorText: invalidToken ? 'Invalid token' : null,
             hintStyle: TextStyle(
               color: WHITE_COLOR,
               fontFamily: 'Raleway',
@@ -158,23 +161,32 @@ class AuthScreenState extends State<AuthScreen> {
                 child: RaisedButton(
                   color: WHITE_COLOR,
                   onPressed: () {
+                    setState(() {
+                      buttonPressed = true;
+                    });
                     runmutation({'token': tokenInput});
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   elevation: 2,
-                  child: Text(
-                    "SIGN IN",
-                    style: TextStyle(
-                        color: PRIMARY_COLOR,
-                        fontSize: 14,
-                        letterSpacing: 1.0,
-                        fontWeight: FontWeight.w500),
-                  ),
+                  child: buttonChild(),
                 ))
           ]),
     );
+  }
+
+  Widget buttonChild() {
+    return buttonPressed
+        ? CupertinoActivityIndicator()
+        : Text(
+            "SIGN IN",
+            style: TextStyle(
+                color: PRIMARY_COLOR,
+                fontSize: 14,
+                letterSpacing: 1.0,
+                fontWeight: FontWeight.w500),
+          );
   }
 
   Widget _mutationComponent() {
@@ -198,7 +210,6 @@ class AuthScreenState extends State<AuthScreen> {
           final user = StaffModel.fromJson(resultData['staffLogin']['user']);
           appState.setUserName(user.name);
           appState.setStaffId(user.id);
-          print("ON LOGIN: ${user.id}\nTYPE: ${user.accountType}");
           if (user != null) {
             await prefs.setString(
                 'token', resultData['staffLogin']['jwtToken']);
@@ -221,6 +232,12 @@ class AuthScreenState extends State<AuthScreen> {
               );
             }
           }
+        }
+        if (resultData['staffLogin']['error'] != null) {
+          setState(() {
+            invalidToken = true;
+            buttonPressed = false;
+          });
         }
       },
     );

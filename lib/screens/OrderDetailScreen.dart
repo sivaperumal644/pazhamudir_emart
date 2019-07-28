@@ -141,8 +141,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         },
       ),
       builder: (runMutation, result) {
-        print(result.data);
-        print(result.errors);
         return rejectButton(runMutation);
       },
     );
@@ -161,8 +159,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         },
       ),
       builder: (runMutation, result) {
-        print(result.data);
-        print(result.errors);
         if (status == OrderStatuses.DELIVERED_AND_PAID) {
           return PrimaryButtonWidget(
             buttonText: 'MARK ORDER DELIVERED',
