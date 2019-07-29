@@ -4,6 +4,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/updateInventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
@@ -16,6 +18,7 @@ class ItemModalBottomSheet extends StatefulWidget {
   double priceInput;
   double quantityInput;
   String photoUrl;
+  InventoryItemModel inventory;
   bool isNewInventory = false;
 
   ItemModalBottomSheet(
@@ -27,6 +30,7 @@ class ItemModalBottomSheet extends StatefulWidget {
       double priceInput,
       double quantityInput,
       String photoUrl,
+      InventoryItemModel inventory,
       bool isNewInventory})
       : super(key: key) {
     this.id = id;
@@ -36,6 +40,7 @@ class ItemModalBottomSheet extends StatefulWidget {
     this.priceInput = priceInput;
     this.quantityInput = quantityInput;
     this.photoUrl = photoUrl;
+    this.inventory = inventory;
     this.isNewInventory = isNewInventory;
   }
 
@@ -51,6 +56,32 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
     "inStock": "",
     "unit": "kg"
   };
+  TextEditingController nameController,
+      categoryController,
+      priceController,
+      inStockController;
+  String unitOnEdit;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isNewInventory) {
+      nameController = TextEditingController();
+      categoryController = TextEditingController();
+      priceController = TextEditingController();
+      inStockController = TextEditingController();
+      unitOnEdit = 'kg';
+    } else {
+      nameController = TextEditingController(text: widget.inventory.name);
+      categoryController =
+          TextEditingController(text: widget.inventory.category);
+      priceController =
+          TextEditingController(text: widget.inventory.price.toString());
+      inStockController =
+          TextEditingController(text: widget.inventory.inStock.toString());
+      unitOnEdit = widget.inventory.unit;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +134,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    itemTextField(context, 'Name', 1.7, 'name'),
+                    itemTextField(context, 'Name', 1.7, 'name',
+                        controller: nameController),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child:
-                          itemTextField(context, 'category', 1.7, 'category'),
+                      child: itemTextField(context, 'category', 1.7, 'category',
+                          controller: categoryController),
                     )
                   ],
                 )
@@ -133,10 +165,10 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                     Row(
                       children: <Widget>[
                         Radio(
-                          groupValue: input['unit'],
+                          groupValue: unitOnEdit,
                           onChanged: (value) {
                             setState(() {
-                              input['unit'] = value;
+                              unitOnEdit = value;
                             });
                           },
                           activeColor: PRIMARY_COLOR,
@@ -151,10 +183,10 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                     Row(
                       children: <Widget>[
                         Radio(
-                          groupValue: input['unit'],
+                          groupValue: unitOnEdit,
                           onChanged: (value) {
                             setState(() {
-                              input['unit'] = value;
+                              unitOnEdit = value;
                             });
                           },
                           activeColor: PRIMARY_COLOR,
@@ -177,15 +209,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Price per ${input['unit'] == 'kg' ? 'kg' : 'unit'}",
+                  "Price per ${unitOnEdit == 'kg' ? 'kg' : 'unit'}",
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(
-                    context,
-                    'Rupees/${input['unit'] == 'kg' ? 'kg' : 'unit'}',
-                    3,
-                    'price',
-                    isNumeric: true)
+                itemTextField(context,
+                    'Rupees/${unitOnEdit == 'kg' ? 'kg' : 'unit'}', 3, 'price',
+                    isNumeric: true, controller: priceController)
               ],
             ),
           ),
@@ -198,13 +227,15 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                   'Quantity in stock',
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(context,
-                    '${input['unit'] == 'kg' ? 'kg' : 'unit'}', 3, 'inStock',
-                    isNumeric: true),
+                itemTextField(context, '${unitOnEdit == 'kg' ? 'kg' : 'unit'}',
+                    3, 'inStock',
+                    isNumeric: true, controller: inStockController),
               ],
             ),
           ),
-          inventoryMutationComponent(),
+          widget.isNewInventory
+              ? inventoryMutationComponent()
+              : updateInventoryMutationComponent(),
           widget.isNewInventory ? Text('') : deleteInventoryMutationComponent()
         ],
       ),
@@ -214,7 +245,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
 
   Widget removeButton(RunMutation runMutation) {
     return OutlineButton(
-      child: Text('remove'),
+      child: Text('REMOVE',
+          style: TextStyle(color: Colors.red, letterSpacing: 1.0)),
       onPressed: () {
         runMutation({'inventoryId': widget.id});
       },
@@ -235,7 +267,32 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       update: (Cache cache, QueryResult result) {
         return cache;
       },
-      onCompleted: (dynamic resultData) {},
+      onCompleted: (dynamic resultData) {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget updateInventoryMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(document: updateInventoryMutation, context: {
+        'headers': <String, String>{
+          'Authorization': 'Bearer ${appState.getJwtToken}',
+        },
+      }),
+      builder: (runMutation, result) {
+        print(result.errors);
+        print(result.data);
+        return saveChangesButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) {
+        print(resultData);
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -264,20 +321,20 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
       onPressed: () {
         runMutation({
-          'name': input['name'],
-          'price': double.parse(input['price']),
+          'inventoryId': widget.inventory.id,
+          'name': nameController.text,
+          'price': double.parse(priceController.text),
           'perUnit': 1,
-          'unit': input['unit'],
-          'category': input['category'],
-          'inStock': double.parse(input['inStock'])
+          'unit': unitOnEdit,
+          'category': categoryController.text,
+          'inStock': double.parse(inStockController.text)
         });
-        Navigator.pop(context);
       },
     );
   }
 
   Container itemTextField(BuildContext context, inputText, width, String type,
-      {bool isNumeric = false}) {
+      {bool isNumeric = false, TextEditingController controller}) {
     return Container(
         height: 50,
         width: MediaQuery.of(context).size.width / width,
@@ -285,6 +342,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TextField(
+              controller: controller,
               keyboardType:
                   isNumeric ? TextInputType.phone : TextInputType.text,
               onChanged: (val) {

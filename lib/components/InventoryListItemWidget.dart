@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/components/ItemModalBottomSheet.dart';
 import 'package:pazhamuthir_emart_service/constants/styles.dart';
+import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 
 class InventoryItemWidget extends StatelessWidget {
   final String id;
@@ -10,6 +11,7 @@ class InventoryItemWidget extends StatelessWidget {
   final double price;
   final double inStock;
   final String searchText;
+  final InventoryItemModel inventory;
 
   const InventoryItemWidget(
       {Key key,
@@ -19,7 +21,8 @@ class InventoryItemWidget extends StatelessWidget {
       this.unit,
       this.price,
       this.inStock,
-      this.searchText})
+      this.searchText,
+      this.inventory})
       : super(key: key);
 
   @override
@@ -36,6 +39,7 @@ class InventoryItemWidget extends StatelessWidget {
                   builder: (context) => ItemModalBottomSheet(
                         isNewInventory: false,
                         id: id,
+                        inventory: inventory,
                       )));
         },
         child: Column(

@@ -79,6 +79,7 @@ class InventoryScreenState extends State<InventoryScreen> {
       unit: inventory.unit,
       inStock: inventory.inStock,
       searchText: appState.getSearchText,
+      inventory: inventory,
     );
   }
 
