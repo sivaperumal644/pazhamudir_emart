@@ -6,9 +6,8 @@ class InventoryItemModel {
   final String unit;
   final String category;
   final double inStock;
-  final String photoUrl;
 
-  InventoryItemModel({this.name, this.id, this.price, this.perUnit, this.unit, this.category, this.inStock, this.photoUrl});
+  InventoryItemModel({this.name, this.id, this.price, this.perUnit, this.unit, this.category, this.inStock});
 
   factory InventoryItemModel.fromJson(Map<dynamic, dynamic> json) {
     return InventoryItemModel(
@@ -19,7 +18,6 @@ class InventoryItemModel {
       unit: json['unit'],
       category: json['category'],
       inStock: json['inStock'].toDouble(),
-      photoUrl: json['photoUrl']
     );
   }
 

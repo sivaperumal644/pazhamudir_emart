@@ -13,7 +13,6 @@ mutation DeleteInventory(\$inventoryId:String){
       unit,
       category,
       inStock,
-      photoUrl
     }
   }
 }

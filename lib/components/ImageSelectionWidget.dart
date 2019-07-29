@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:image_picker_modern/image_picker_modern.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
@@ -31,9 +30,7 @@ class ImageSelectionWidget extends StatelessWidget {
           child: Image.network('$url'),
         ),
         FlatButton(
-          onPressed: () {
-            var image = ImagePicker.pickImage(source: ImageSource.camera);
-          },
+          onPressed: () {},
           child: Text(
             'UPDATE IMAGE',
             style: TextStyle(

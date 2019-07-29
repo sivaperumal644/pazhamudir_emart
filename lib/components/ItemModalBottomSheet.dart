@@ -18,7 +18,6 @@ class ItemModalBottomSheet extends StatefulWidget {
   String unit;
   double priceInput;
   double quantityInput;
-  String photoUrl;
   InventoryItemModel inventory;
   bool isNewInventory = false;
 
@@ -30,7 +29,6 @@ class ItemModalBottomSheet extends StatefulWidget {
       String unit,
       double priceInput,
       double quantityInput,
-      String photoUrl,
       InventoryItemModel inventory,
       bool isNewInventory})
       : super(key: key) {
@@ -40,7 +38,6 @@ class ItemModalBottomSheet extends StatefulWidget {
     this.unit = unit;
     this.priceInput = priceInput;
     this.quantityInput = quantityInput;
-    this.photoUrl = photoUrl;
     this.inventory = inventory;
     this.isNewInventory = isNewInventory;
   }
@@ -90,6 +87,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       backgroundColor: WHITE_COLOR,
       body: ListView(
         children: <Widget>[
+          Align(alignment: Alignment.topLeft, child: Icon(Icons.arrow_back)),
           Container(
             height: 16,
           ),
@@ -97,7 +95,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               widget.isNewInventory ? 'Add New Item' : 'Update Item',
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.left,
               style: TextStyle(
                   fontFamily: 'Raleway',
                   fontSize: 24,
@@ -312,17 +310,28 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
   Widget saveChangesButton(RunMutation runMutation) {
     return PrimaryButtonWidget(
       buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
-      onPressed: () {
-        runMutation({
-          'inventoryId': widget.inventory.id,
-          'name': nameController.text,
-          'price': double.parse(priceController.text),
-          'perUnit': 1,
-          'unit': unitOnEdit,
-          'category': categoryController.text,
-          'inStock': double.parse(inStockController.text)
-        });
-      },
+      onPressed: isEverythingValidated()
+          ? () {
+              widget.isNewInventory
+                  ? runMutation({
+                      'name': nameController.text,
+                      'price': double.parse(priceController.text),
+                      'perUnit': 1,
+                      'unit': unitOnEdit,
+                      'category': categoryController.text,
+                      'inStock': double.parse(inStockController.text)
+                    })
+                  : runMutation({
+                      'inventoryId': widget.inventory.id,
+                      'name': nameController.text,
+                      'price': double.parse(priceController.text),
+                      'perUnit': 1,
+                      'unit': unitOnEdit,
+                      'category': categoryController.text,
+                      'inStock': double.parse(inStockController.text)
+                    });
+            }
+          : null,
     );
   }
 
@@ -344,10 +353,26 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                 });
               },
               decoration: InputDecoration(
+                  errorText: validateForNotEmpty(controller.text),
                   labelStyle: TextStyle(
                       fontSize: 14, color: Color.fromRGBO(0, 0, 0, 0.5)),
                   labelText: inputText,
                   border: InputBorder.none),
             )));
+  }
+
+  bool isEverythingValidated() {
+    return nameController.text.isNotEmpty &&
+        categoryController.text.isNotEmpty &&
+        priceController.text.isNotEmpty &&
+        inStockController.text.isNotEmpty;
+  }
+
+  validateForNotEmpty(String text) {
+    if (text.isEmpty) {
+      return 'Do not leave this empty';
+    } else {
+      return null;
+    }
   }
 }

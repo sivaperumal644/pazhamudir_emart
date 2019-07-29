@@ -96,6 +96,7 @@ class InventoryScreenState extends State<InventoryScreen> {
         pollInterval: 10,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
+        print(result.errors);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));

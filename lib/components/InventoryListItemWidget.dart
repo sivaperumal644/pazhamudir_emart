@@ -5,7 +5,6 @@ import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 
 class InventoryItemWidget extends StatelessWidget {
   final String id;
-  final String photoUrl;
   final String name;
   final String unit;
   final double price;
@@ -16,7 +15,6 @@ class InventoryItemWidget extends StatelessWidget {
   const InventoryItemWidget(
       {Key key,
       this.id,
-      this.photoUrl,
       this.name,
       this.unit,
       this.price,

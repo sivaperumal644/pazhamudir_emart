@@ -147,7 +147,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 28.0, top: 32.0),
+            padding: const EdgeInsets.only(left: 32.0, right: 28.0, top: 32.0, bottom: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -204,15 +204,17 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
       builder: (runMutation, result) {
         return SecondaryButtonWidget(
           buttonText: inputText,
-          onPressed: () {
-            runMutation({
-              'name': nameController.text,
-              'phoneNumber': phoneNumberController.text,
-              'accountType': accountTypeOnEdit,
-              'token': tokenOnEdit
-            });
-            Navigator.pop(context);
-          },
+          onPressed: isEverythingValidated()
+              ? () {
+                  runMutation({
+                    'name': nameController.text,
+                    'phoneNumber': phoneNumberController.text,
+                    'accountType': accountTypeOnEdit,
+                    'token': tokenOnEdit
+                  });
+                  Navigator.pop(context);
+                }
+              : null,
         );
       },
     );
@@ -267,5 +269,10 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
         return removeButton(runMutation);
       },
     );
+  }
+
+  bool isEverythingValidated() {
+    return nameController.text.isNotEmpty &&
+        phoneNumberController.text.isNotEmpty;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 
 class DetailsTextField extends StatelessWidget {
@@ -24,6 +25,7 @@ class DetailsTextField extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold),
       decoration: InputDecoration(
+          counterText: validateForNotEmpty(controller.text),
           focusedBorder:
               UnderlineInputBorder(borderSide: BorderSide(color: BLACK_COLOR)),
           enabledBorder:
@@ -37,5 +39,13 @@ class DetailsTextField extends StatelessWidget {
           ),
           labelText: inputText),
     );
+  }
+
+  validateForNotEmpty(String text) {
+    if (text.isEmpty) {
+      return 'Do not leave this empty';
+    } else {
+      return null;
+    }
   }
 }
