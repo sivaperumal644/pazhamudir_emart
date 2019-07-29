@@ -31,7 +31,9 @@ class InventoryScreenState extends State<InventoryScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ItemModalBottomSheet()));
+                      builder: (context) => ItemModalBottomSheet(
+                            isNewInventory: true,
+                          )));
               // showModalBottomSheet(
               //     context: context,
               //     builder: (BuildContext context) {
@@ -71,11 +73,13 @@ class InventoryScreenState extends State<InventoryScreen> {
   Widget itemContainer(InventoryItemModel inventory) {
     final appState = Provider.of<AppState>(context);
     return InventoryItemWidget(
+      id: inventory.id,
       name: inventory.name,
       price: inventory.price,
       unit: inventory.unit,
       inStock: inventory.inStock,
       searchText: appState.getSearchText,
+      inventory: inventory,
     );
   }
 

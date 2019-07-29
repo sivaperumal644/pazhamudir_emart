@@ -1,26 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:pazhamuthir_emart_service/components/ItemModalBottomSheet.dart';
 import 'package:pazhamuthir_emart_service/constants/styles.dart';
+import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 
 class InventoryItemWidget extends StatelessWidget {
+  final String id;
   final String photoUrl;
   final String name;
   final String unit;
   final double price;
   final double inStock;
   final String searchText;
+  final InventoryItemModel inventory;
 
   const InventoryItemWidget(
-      {Key key, this.photoUrl, this.name, this.unit, this.price, this.inStock, this.searchText})
+      {Key key,
+      this.id,
+      this.photoUrl,
+      this.name,
+      this.unit,
+      this.price,
+      this.inStock,
+      this.searchText,
+      this.inventory})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(!name.toLowerCase().contains(searchText.toLowerCase())){
+    if (!name.toLowerCase().contains(searchText.toLowerCase())) {
       return Container();
     }
     return Container(
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ItemModalBottomSheet(
+                        isNewInventory: false,
+                        id: id,
+                        inventory: inventory,
+                      )));
+        },
         child: Column(
           children: <Widget>[
             Container(

@@ -3,16 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/components/IncomingOrderWidget.dart';
 import 'package:pazhamuthir_emart_service/components/ServiceOrdersWidget.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/getAllOrders_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/strings.dart';
-import 'package:pazhamuthir_emart_service/model/AddressModel.dart';
-import 'package:pazhamuthir_emart_service/model/CartItemModel.dart';
-import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:pazhamuthir_emart_service/screens/OrderDetailScreen.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -22,6 +18,21 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class OrdersScreenState extends State<OrdersScreen> {
+  String staffId = '';
+  @override
+  void initState() {
+    super.initState();
+    getId();
+  }
+
+  getId() async {
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('staffId');
+    setState(() {
+      staffId = id;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -102,10 +113,9 @@ class OrdersScreenState extends State<OrdersScreen> {
           // orders.sort((a,b){
           //   a.updatedDate.millisecondsSinceEpoch.compareTo(b.updatedDate.millisecondsSinceEpoch);
           // });
-          print("ALREADY LOGGED IN with id ${appState.deliveryStaffId}");
           if (appState.getIsUserDelivery) {
             var filteredList = orders.where((order) {
-              return order.staff?.id == appState.deliveryStaffId;
+              return order.staff?.id == staffId;
             }).toList();
             return orderListComponent(filteredList);
           }

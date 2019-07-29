@@ -67,8 +67,6 @@ Future buildShowDialog(BuildContext context, OrderModel order,
                     child: SecondaryButtonWidget(
                       buttonText: 'PAYMENT COLLECTED',
                       onPressed: () {
-                        print(
-                            "PAYMENT COLLECTED pressed. Now Running Change Status Mutation!");
                         callback({
                           "status": OrderStatuses.DELIVERED_AND_PAID,
                           "orderId": order.id

@@ -2,34 +2,47 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/updateInventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
+import 'package:pazhamuthir_emart_service/components/ImageSelectionWidget.dart';
 
 class ItemModalBottomSheet extends StatefulWidget {
+  String id;
   String nameInput;
   String categoryInput;
   String unit;
   double priceInput;
   double quantityInput;
   String photoUrl;
+  InventoryItemModel inventory;
+  bool isNewInventory = false;
 
   ItemModalBottomSheet(
       {Key key,
+      String id,
       String nameInput,
       String categoryInput,
       String unit,
       double priceInput,
       double quantityInput,
-      String photoUrl})
+      String photoUrl,
+      InventoryItemModel inventory,
+      bool isNewInventory})
       : super(key: key) {
+    this.id = id;
     this.nameInput = nameInput;
     this.categoryInput = categoryInput;
     this.unit = unit;
     this.priceInput = priceInput;
     this.quantityInput = quantityInput;
     this.photoUrl = photoUrl;
+    this.inventory = inventory;
+    this.isNewInventory = isNewInventory;
   }
 
   @override
@@ -44,21 +57,38 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
     "inStock": "",
     "unit": "kg"
   };
+  TextEditingController nameController,
+      categoryController,
+      priceController,
+      inStockController;
+  String unitOnEdit;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isNewInventory) {
+      nameController = TextEditingController();
+      categoryController = TextEditingController();
+      priceController = TextEditingController();
+      inStockController = TextEditingController();
+      unitOnEdit = 'kg';
+    } else {
+      nameController = TextEditingController(text: widget.inventory.name);
+      categoryController =
+          TextEditingController(text: widget.inventory.category);
+      priceController =
+          TextEditingController(text: widget.inventory.price.toString());
+      inStockController =
+          TextEditingController(text: widget.inventory.inStock.toString());
+      unitOnEdit = widget.inventory.unit;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
-      body:
-          // Container(
-          //   height: MediaQuery.of(context).size.height,
-          //   width: MediaQuery.of(context).size.width,
-          //   decoration: BoxDecoration(
-          //       color: WHITE_COLOR,
-          //       borderRadius: BorderRadius.only(
-          //           topLeft: Radius.circular(24), topRight: Radius.circular(24))),
-          //   child:
-          ListView(
+      body: ListView(
         children: <Widget>[
           Container(
             height: 16,
@@ -66,7 +96,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Add New Item',
+              widget.isNewInventory ? 'Add New Item' : 'Update Item',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Raleway',
@@ -79,37 +109,16 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: GREY_COLOR, width: 1)),
-                      child: Icon(
-                        Icons.add,
-                        size: 80,
-                        color: GREY_COLOR,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'ADD IMAGE',
-                        style: TextStyle(color: GREEN_COLOR, fontSize: 14),
-                      ),
-                    )
-                  ],
-                ),
+                new ImageSelectionWidget(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    itemTextField(context, 'Name', 1.7, 'name'),
+                    itemTextField(context, 'Name', 1.7, 'name',
+                        controller: nameController),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child:
-                          itemTextField(context, 'category', 1.7, 'category'),
+                      child: itemTextField(context, 'category', 1.7, 'category',
+                          controller: categoryController),
                     )
                   ],
                 )
@@ -135,10 +144,10 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                     Row(
                       children: <Widget>[
                         Radio(
-                          groupValue: input['unit'],
+                          groupValue: unitOnEdit,
                           onChanged: (value) {
                             setState(() {
-                              input['unit'] = value;
+                              unitOnEdit = value;
                             });
                           },
                           activeColor: PRIMARY_COLOR,
@@ -153,10 +162,10 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                     Row(
                       children: <Widget>[
                         Radio(
-                          groupValue: input['unit'],
+                          groupValue: unitOnEdit,
                           onChanged: (value) {
                             setState(() {
-                              input['unit'] = value;
+                              unitOnEdit = value;
                             });
                           },
                           activeColor: PRIMARY_COLOR,
@@ -179,15 +188,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  "Price per ${input['unit'] == 'kg' ? 'kg' : 'unit'}",
+                  "Price per ${unitOnEdit == 'kg' ? 'kg' : 'unit'}",
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(
-                    context,
-                    'Rupees/${input['unit'] == 'kg' ? 'kg' : 'unit'}',
-                    3,
-                    'price',
-                    isNumeric: true)
+                itemTextField(context,
+                    'Rupees/${unitOnEdit == 'kg' ? 'kg' : 'unit'}', 3, 'price',
+                    isNumeric: true, controller: priceController)
               ],
             ),
           ),
@@ -200,16 +206,43 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                   'Quantity in stock',
                   style: TextStyle(fontSize: 18),
                 ),
-                itemTextField(context,
-                    '${input['unit'] == 'kg' ? 'kg' : 'unit'}', 3, 'inStock',
-                    isNumeric: true),
+                itemTextField(context, '${unitOnEdit == 'kg' ? 'kg' : 'unit'}',
+                    3, 'inStock',
+                    isNumeric: true, controller: inStockController),
               ],
             ),
           ),
-          inventoryMutationComponent()
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 16),
+                child: widget.isNewInventory
+                    ? Text('')
+                    : deleteInventoryMutationComponent(),
+              ),
+              Expanded(
+                child: widget.isNewInventory
+                    ? inventoryMutationComponent()
+                    : updateInventoryMutationComponent(),
+              ),
+            ],
+          )
         ],
       ),
       //),
+    );
+  }
+
+  Widget removeButton(RunMutation runMutation) {
+    return OutlineButton(
+      padding: EdgeInsets.all(16),
+      child: Text('REMOVE',
+          style: TextStyle(color: Colors.red, letterSpacing: 1.0)),
+      onPressed: () {
+        runMutation({'inventoryId': widget.id});
+      },
     );
   }
 
@@ -228,29 +261,73 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         return cache;
       },
       onCompleted: (dynamic resultData) {
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget updateInventoryMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(document: updateInventoryMutation, context: {
+        'headers': <String, String>{
+          'Authorization': 'Bearer ${appState.getJwtToken}',
+        },
+      }),
+      builder: (runMutation, result) {
+        print(result.errors);
+        print(result.data);
+        return saveChangesButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) {
+        print(resultData);
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget deleteInventoryMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(document: deleteInventoryMutation, context: {
+        'headers': <String, String>{
+          'Authorization': 'Bearer ${appState.getJwtToken}',
+        },
+      }),
+      builder: (runMutation, result) {
+        return removeButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) {
+        Navigator.pop(context);
       },
     );
   }
 
   Widget saveChangesButton(RunMutation runMutation) {
     return PrimaryButtonWidget(
-      buttonText: 'SAVE CHANGES',
+      buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
       onPressed: () {
         runMutation({
-          'name': input['name'],
-          'price': double.parse(input['price']),
+          'inventoryId': widget.inventory.id,
+          'name': nameController.text,
+          'price': double.parse(priceController.text),
           'perUnit': 1,
-          'unit': input['unit'],
-          'category': input['category'],
-          'inStock': double.parse(input['inStock'])
+          'unit': unitOnEdit,
+          'category': categoryController.text,
+          'inStock': double.parse(inStockController.text)
         });
-        Navigator.pop(context);
       },
     );
   }
 
   Container itemTextField(BuildContext context, inputText, width, String type,
-      {bool isNumeric = false}) {
+      {bool isNumeric = false, TextEditingController controller}) {
     return Container(
         height: 50,
         width: MediaQuery.of(context).size.width / width,
@@ -258,6 +335,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TextField(
+              controller: controller,
               keyboardType:
                   isNumeric ? TextInputType.phone : TextInputType.text,
               onChanged: (val) {

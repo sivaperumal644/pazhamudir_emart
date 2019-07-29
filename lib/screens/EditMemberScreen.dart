@@ -5,6 +5,7 @@ import 'package:pazhamuthir_emart_service/components/DetailsTextField.dart';
 import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/createStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/disableStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
@@ -150,17 +151,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                widget.isNewEntry
-                    ? Text('')
-                    : OutlineButton(
-                        onPressed: () {},
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(12.0)),
-                        child: Text(
-                          'REMOVE',
-                          style: TextStyle(color: RED_COLOR),
-                        ),
-                      ),
+                widget.isNewEntry ? Text('') : disableStaffMutationComponent(),
                 widget.isNewEntry
                     ? createStaffMutationComponent('ADD STAFF')
                     : updateStaffMutationComponent('SAVE CHANGES')
@@ -168,6 +159,20 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  OutlineButton removeButton(RunMutation runMutation) {
+    return OutlineButton(
+      onPressed: () {
+        runMutation({'staffId': id});
+      },
+      shape: new RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(12.0)),
+      child: Text(
+        'REMOVE',
+        style: TextStyle(color: RED_COLOR),
       ),
     );
   }
@@ -240,6 +245,26 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             });
           },
         );
+      },
+    );
+  }
+
+  Widget disableStaffMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: disableStaffMutation,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      onCompleted: (result) {
+        Navigator.pop(context);
+      },
+      builder: (runMutation, result) {
+        return removeButton(runMutation);
       },
     );
   }
