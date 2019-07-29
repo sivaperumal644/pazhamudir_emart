@@ -119,9 +119,11 @@ class AuthScreenState extends State<AuthScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 32.0),
       child: TextField(
+        keyboardType: TextInputType.emailAddress,
+        textAlign: TextAlign.center,
         onChanged: (val) {
           setState(() {
-            tokenInput = val;
+            tokenInput = val.toUpperCase();
             invalidToken = false;
           });
         },
@@ -129,7 +131,8 @@ class AuthScreenState extends State<AuthScreen> {
             color: WHITE_COLOR,
             fontFamily: 'Raleway',
             fontSize: 18,
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.4),
         decoration: InputDecoration(
             focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: WHITE_COLOR)),
@@ -137,7 +140,10 @@ class AuthScreenState extends State<AuthScreen> {
                 borderSide: BorderSide(color: WHITE_COLOR)),
             border: UnderlineInputBorder(
                 borderSide: BorderSide(color: WHITE_COLOR)),
-            errorText: invalidToken ? 'Invalid token' : null,
+            errorText: invalidToken ? '🤔 Invalid token' : null,
+            focusedErrorBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red.shade200, width: 2)),
+            errorStyle: TextStyle(color: WHITE_COLOR),
             hintStyle: TextStyle(
               color: WHITE_COLOR,
               fontFamily: 'Raleway',
@@ -231,6 +237,7 @@ class AuthScreenState extends State<AuthScreen> {
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             }
+            print("AUTH DONE: Type: ${user.accountType} ID: ${user.id}");
           }
         }
         if (resultData['staffLogin']['error'] != null) {

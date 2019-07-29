@@ -18,7 +18,7 @@ class PrimaryButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 40.0),
+      padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
       child: RaisedButton(
         onPressed: onPressed,
         color: PRIMARY_COLOR,

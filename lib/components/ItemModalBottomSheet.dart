@@ -9,6 +9,7 @@ import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
+import 'package:pazhamuthir_emart_service/components/ImageSelectionWidget.dart';
 
 class ItemModalBottomSheet extends StatefulWidget {
   String id;
@@ -108,29 +109,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: GREY_COLOR, width: 1)),
-                      child: Icon(
-                        Icons.add,
-                        size: 80,
-                        color: GREY_COLOR,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'ADD IMAGE',
-                        style: TextStyle(color: GREEN_COLOR, fontSize: 14),
-                      ),
-                    )
-                  ],
-                ),
+                new ImageSelectionWidget(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -233,10 +212,23 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               ],
             ),
           ),
-          widget.isNewInventory
-              ? inventoryMutationComponent()
-              : updateInventoryMutationComponent(),
-          widget.isNewInventory ? Text('') : deleteInventoryMutationComponent()
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 16),
+                child: widget.isNewInventory
+                    ? Text('')
+                    : deleteInventoryMutationComponent(),
+              ),
+              Expanded(
+                child: widget.isNewInventory
+                    ? inventoryMutationComponent()
+                    : updateInventoryMutationComponent(),
+              ),
+            ],
+          )
         ],
       ),
       //),
@@ -245,6 +237,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
 
   Widget removeButton(RunMutation runMutation) {
     return OutlineButton(
+      padding: EdgeInsets.all(16),
       child: Text('REMOVE',
           style: TextStyle(color: Colors.red, letterSpacing: 1.0)),
       onPressed: () {

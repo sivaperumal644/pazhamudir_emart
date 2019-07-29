@@ -8,6 +8,7 @@ import 'package:pazhamuthir_emart_service/constants/graphql/getAllOrders_graphql
 import 'package:pazhamuthir_emart_service/screens/OrderDetailScreen.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersScreen extends StatefulWidget {
   @override
@@ -17,6 +18,21 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class OrdersScreenState extends State<OrdersScreen> {
+  String staffId = '';
+  @override
+  void initState() {
+    super.initState();
+    getId();
+  }
+
+  getId() async {
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    String id = sharedPref.getString('staffId');
+    setState(() {
+      staffId = id;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
@@ -99,7 +115,7 @@ class OrdersScreenState extends State<OrdersScreen> {
           // });
           if (appState.getIsUserDelivery) {
             var filteredList = orders.where((order) {
-              return order.staff?.id == appState.deliveryStaffId;
+              return order.staff?.id == staffId;
             }).toList();
             return orderListComponent(filteredList);
           }
