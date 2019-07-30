@@ -117,8 +117,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                 padding: const EdgeInsets.only(top: 24.0),
                 child: new ImageSelectionWidget(
                   onUserImageSet: (base64) {
-                    print("RETURNED FROM IMAGE PICKER $base64");
                     setState(() {
+                      print("RETURNED FROM IMAGE PICKER $base64");
                       imageAsBase64 = base64;
                     });
                   },
