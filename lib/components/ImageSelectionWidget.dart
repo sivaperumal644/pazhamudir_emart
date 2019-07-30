@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:image/image.dart' as ImageConverter;
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
@@ -25,6 +26,9 @@ class ImageSelectionWidget extends StatefulWidget {
 }
 
 class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
+  bool isImageSet = false;
+  String base64Result = '';
+
   pickImageFromGallery(ImageSource source) {
     return ImagePicker.pickImage(source: source);
   }
@@ -33,20 +37,43 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          height: 100,
-          width: 100,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(color: GREY_COLOR, width: 1)),
-          child: Image.network('${widget.url}'),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(color: Colors.grey.shade300, width: 1.3)),
+            child: isImageSet
+                ? Image.memory(
+                    base64Decode(base64Result),
+                    fit: BoxFit.cover,
+                  )
+                : Image.network(
+                    '${widget.url}',
+                    fit: BoxFit.cover,
+                  ),
+          ),
         ),
-        FlatButton(
-          onPressed: handleNewImage,
-          child: Text(
-            'UPDATE IMAGE',
-            style: TextStyle(
-                color: GREEN_COLOR, fontSize: 14, fontWeight: FontWeight.w500),
+        Container(
+          height: 10,
+        ),
+        SizedBox(
+          height: 34,
+          child: OutlineButton(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
+            onPressed: handleNewImage,
+            child: Text(
+              '${widget.url}' == 'null' && !isImageSet
+                  ? 'ADD IMAGE'
+                  : 'UPDATE IMAGE',
+              style: TextStyle(
+                  color: GREEN_COLOR,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
+            ),
           ),
         )
       ],
@@ -56,7 +83,13 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
   void handleNewImage() async {
     File item = await pickImageFromGallery(ImageSource.gallery);
     List<int> fileAsBytes = await item.readAsBytes();
-    String base64String = base64Encode(fileAsBytes);
+    ImageConverter.Image image = ImageConverter.decodeImage(fileAsBytes);
+    image = ImageConverter.copyResize(image, width: 100);
+    String base64String = base64Encode(ImageConverter.encodeJpg(image));
+    setState(() {
+      base64Result = base64String;
+      isImageSet = true;
+    });
     widget.onUserImageSet(base64String);
   }
 }

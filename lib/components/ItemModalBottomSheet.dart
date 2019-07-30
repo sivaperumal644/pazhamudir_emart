@@ -84,31 +84,38 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: WHITE_COLOR,
-      body: ListView(
-        children: <Widget>[
-          Align(alignment: Alignment.topLeft, child: Icon(Icons.arrow_back)),
-          Container(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              widget.isNewInventory ? 'Add New Item' : 'Update Item',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                new ImageSelectionWidget(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: WHITE_COLOR,
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                height: 16,
+              ),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  widget.isNewInventory ? 'Add New Item' : 'Update Item',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: new ImageSelectionWidget(
                   onUserImageSet: (base64) {
                     print("RETURNED FROM IMAGE PICKER $base64");
                     setState(() {
@@ -116,136 +123,129 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                     });
                   },
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    itemTextField(context, 'Name', 1.7, 'name',
-                        controller: nameController),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: itemTextField(context, 'category', 1.7, 'category',
-                          controller: categoryController),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    'Unit of measurement',
-                    style: TextStyle(fontSize: 18),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  itemTextField(context, 'Name', 1.7, 'name',
+                      controller: nameController),
+                  itemTextField(context, 'Category', 1.7, 'Category',
+                      controller: categoryController),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: Divider(),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          groupValue: unitOnEdit,
-                          onChanged: (value) {
-                            setState(() {
-                              unitOnEdit = value;
-                            });
-                          },
-                          activeColor: PRIMARY_COLOR,
-                          value: "kg",
-                        ),
-                        Text(
-                          'Kilogram (kg)',
-                          style: TextStyle(fontSize: 18),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio(
-                          groupValue: unitOnEdit,
-                          onChanged: (value) {
-                            setState(() {
-                              unitOnEdit = value;
-                            });
-                          },
-                          activeColor: PRIMARY_COLOR,
-                          value: "unit",
-                        ),
-                        Text(
-                          'Single Piece (unit)',
-                          style: TextStyle(fontSize: 18),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "Price per ${unitOnEdit == 'kg' ? 'kg' : 'unit'}",
-                  style: TextStyle(fontSize: 18),
-                ),
-                itemTextField(context,
-                    'Rupees/${unitOnEdit == 'kg' ? 'kg' : 'unit'}', 3, 'price',
-                    isNumeric: true, controller: priceController)
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Quantity in stock',
-                  style: TextStyle(fontSize: 18),
-                ),
-                itemTextField(context, '${unitOnEdit == 'kg' ? 'kg' : 'unit'}',
-                    3, 'inStock',
-                    isNumeric: true, controller: inStockController),
-              ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 16),
-                child: widget.isNewInventory
-                    ? Text('')
-                    : deleteInventoryMutationComponent(),
+                  Text(
+                    'Unit of measurement',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: GREY_COLOR,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        groupValue: unitOnEdit,
+                        onChanged: (value) {
+                          setState(() {
+                            unitOnEdit = value;
+                          });
+                        },
+                        activeColor: PRIMARY_COLOR,
+                        value: "kg",
+                      ),
+                      Text(
+                        'Kilogram (kg)',
+                        style: TextStyle(fontSize: 18),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        groupValue: unitOnEdit,
+                        onChanged: (value) {
+                          setState(() {
+                            unitOnEdit = value;
+                          });
+                        },
+                        activeColor: PRIMARY_COLOR,
+                        value: "unit",
+                      ),
+                      Text(
+                        'Single Piece (unit)',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: Divider(),
+                  ),
+                  Text(
+                    "Price per ${unitOnEdit == 'kg' ? 'kg' : 'unit'}",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: GREY_COLOR,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  itemTextField(
+                      context,
+                      'Rupees/${unitOnEdit == 'kg' ? 'kg' : 'unit'}',
+                      3,
+                      'price',
+                      isNumeric: true,
+                      controller: priceController),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                    child: Divider(),
+                  ),
+                  Text(
+                    'Quantity in stock',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: GREY_COLOR,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  itemTextField(
+                      context,
+                      '${unitOnEdit == 'kg' ? 'kg' : 'unit'} (in stock)',
+                      3,
+                      'inStock',
+                      isNumeric: true,
+                      controller: inStockController),
+                ],
               ),
-              Expanded(
-                child: widget.isNewInventory
-                    ? inventoryMutationComponent()
-                    : updateInventoryMutationComponent(),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: widget.isNewInventory
+                        ? Text('')
+                        : deleteInventoryMutationComponent(),
+                  ),
+                  Spacer(),
+                  widget.isNewInventory
+                      ? inventoryMutationComponent()
+                      : updateInventoryMutationComponent(),
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
+        //),
       ),
-      //),
     );
   }
 
   Widget removeButton(RunMutation runMutation) {
-    return OutlineButton(
-      padding: EdgeInsets.all(16),
-      child: Text('REMOVE',
-          style: TextStyle(color: Colors.red, letterSpacing: 1.0)),
+    return IconButton(
+      tooltip: 'Delete item',
+      icon: Icon(
+        Icons.delete_outline,
+        color: Colors.red,
+      ),
       onPressed: () {
         runMutation({'inventoryId': widget.id});
       },
@@ -348,12 +348,13 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
   Container itemTextField(BuildContext context, inputText, width, String type,
       {bool isNumeric = false, TextEditingController controller}) {
     return Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width / width,
-        color: Color.fromRGBO(0, 0, 0, 0.1),
         child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: const EdgeInsets.only(bottom: 8),
             child: TextField(
+              style: TextStyle(
+                  fontFamily: 'Raleway',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
               controller: controller,
               keyboardType:
                   isNumeric ? TextInputType.phone : TextInputType.text,
@@ -364,10 +365,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               },
               decoration: InputDecoration(
                   errorText: validateForNotEmpty(controller.text),
-                  labelStyle: TextStyle(
-                      fontSize: 14, color: Color.fromRGBO(0, 0, 0, 0.5)),
-                  labelText: inputText,
-                  border: InputBorder.none),
+                  labelText: inputText),
             )));
   }
 

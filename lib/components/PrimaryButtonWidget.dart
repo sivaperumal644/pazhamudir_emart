@@ -23,7 +23,7 @@ class PrimaryButtonWidget extends StatelessWidget {
         onPressed: onPressed,
         color: PRIMARY_COLOR,
         shape: new RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(12.0)),
+            borderRadius: new BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Text(

@@ -46,10 +46,12 @@ class InventoryItemWidget extends StatelessWidget {
               padding: EdgeInsets.only(top: 8.0, left: 16, right: 16),
               child: Row(
                 children: <Widget>[
-                  Image.network(
-                    'https://befreshcorp.net/wp-content/uploads/2017/06/product-packshot-Carrot-558x600.jpg',
+                  FadeInImage.assetNetwork(
+                    placeholder: 'assets/carrot.png',
                     height: 64,
                     width: 64,
+                    image:
+                        'http://pazhamudhir.herokuapp.com/image/${inventory.id}',
                   ),
                   Container(
                     width: 8,
