@@ -59,6 +59,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       priceController,
       inStockController;
   String unitOnEdit;
+  String imageAsBase64 = '';
 
   @override
   void initState() {
@@ -107,7 +108,14 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                new ImageSelectionWidget(),
+                new ImageSelectionWidget(
+                  onUserImageSet: (base64) {
+                    print("RETURNED FROM IMAGE PICKER $base64");
+                    setState(() {
+                      imageAsBase64 = base64;
+                    });
+                  },
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -319,7 +327,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                       'perUnit': 1,
                       'unit': unitOnEdit,
                       'category': categoryController.text,
-                      'inStock': double.parse(inStockController.text)
+                      'inStock': double.parse(inStockController.text),
+                      'imageString': imageAsBase64
                     })
                   : runMutation({
                       'inventoryId': widget.inventory.id,
@@ -328,7 +337,8 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                       'perUnit': 1,
                       'unit': unitOnEdit,
                       'category': categoryController.text,
-                      'inStock': double.parse(inStockController.text)
+                      'inStock': double.parse(inStockController.text),
+                      'imageString': imageAsBase64
                     });
             }
           : null,

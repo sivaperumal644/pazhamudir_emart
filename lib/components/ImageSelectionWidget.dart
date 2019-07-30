@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -9,13 +11,23 @@ import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
-class ImageSelectionWidget extends StatelessWidget {
+class ImageSelectionWidget extends StatefulWidget {
   final String url;
-  const ImageSelectionWidget({
-    Key key,
-    this.url,
-  }) : super(key: key);
+  final Function(String base64Result) onUserImageSet;
+  const ImageSelectionWidget({Key key, this.url, this.onUserImageSet})
+      : super(key: key);
+
+  @override
+  _ImageSelectionWidgetState createState() => _ImageSelectionWidgetState();
+}
+
+class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
+  pickImageFromGallery(ImageSource source) {
+    return ImagePicker.pickImage(source: source);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +39,10 @@ class ImageSelectionWidget extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               border: Border.all(color: GREY_COLOR, width: 1)),
-          child: Image.network('$url'),
+          child: Image.network('${widget.url}'),
         ),
         FlatButton(
-          onPressed: () {},
+          onPressed: handleNewImage,
           child: Text(
             'UPDATE IMAGE',
             style: TextStyle(
@@ -39,5 +51,12 @@ class ImageSelectionWidget extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void handleNewImage() async {
+    File item = await pickImageFromGallery(ImageSource.gallery);
+    List<int> fileAsBytes = await item.readAsBytes();
+    String base64String = base64Encode(fileAsBytes);
+    widget.onUserImageSet(base64String);
   }
 }
