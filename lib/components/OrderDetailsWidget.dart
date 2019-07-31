@@ -50,18 +50,16 @@ class OrderDetailsWidget extends StatelessWidget {
           style: RaleWayTitle,
           textAlign: TextAlign.start,
         ),
-        Container(
-          height: 8,
-        ),
-        new AddressItemWidget(
+        Container(height: 8),
+        AddressItemWidget(
           title: 'Customer Name',
           value: order.address.name,
         ),
-        new AddressItemWidget(
+        AddressItemWidget(
           title: 'Contact No.',
           value: order.address.phoneNumber,
         ),
-        new AddressItemWidget(
+        AddressItemWidget(
           title: 'Address',
           value: order.address.addressLine,
         ),
@@ -75,8 +73,9 @@ class OrderDetailsWidget extends StatelessWidget {
               onPressed: () {
                 launch('tel://${order.address.phoneNumber}');
               },
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(12.0)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
               child: Text(
                 'CALL',
                 style: TextStyle(color: GREEN_COLOR),

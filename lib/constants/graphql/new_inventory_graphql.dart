@@ -1,6 +1,6 @@
 String newInventoryMutation = """
-  mutation AddNewInventory(\$name:String, \$perUnit:Float, \$price:Float, \$unit:String, \$category:String, \$inStock:Float){
-  addNewInventory(name:\$name, perUnit:\$perUnit, price:\$price, unit:\$unit, category:\$category, inStock:\$inStock)
+  mutation AddNewInventory(\$name:String, \$perUnit:Float, \$price:Float, \$unit:String, \$category:String, \$inStock:Float, \$imageString:String){
+  addNewInventory(name:\$name, perUnit:\$perUnit, price:\$price, unit:\$unit, category:\$category, inStock:\$inStock, imageString: \$imageString)
   {
     inventory
     {

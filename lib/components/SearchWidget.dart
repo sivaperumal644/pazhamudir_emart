@@ -14,7 +14,6 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  
   String searchText = '';
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,8 @@ class _SearchWidgetState extends State<SearchWidget> {
             width: 4,
           ),
           IconButton(
-            icon: Icon(searchText.isEmpty ? Icons.search : Icons.cancel), onPressed: () {},
+            icon: Icon(searchText.isEmpty ? Icons.search : Icons.cancel),
+            onPressed: () {},
           )
         ],
       ),

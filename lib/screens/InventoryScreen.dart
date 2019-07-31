@@ -57,17 +57,30 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget itemsList(List<InventoryItemModel> inventories) {
-    return ListView.builder(
+    return ListView(
+      children: <Widget>[
+        Container(
+          height: 80,
+        ),
+        ...inventories.map((model) => itemContainer(model)),
+        Container(
+          height: 80,
+        )
+      ],
+    );
+    /* return ListView.builder(
       itemCount: inventories.length + 1,
       itemBuilder: (context, index) {
-        if (index == inventories.length) {
+        print(index);
+        if (index == inventories.length || index == 0) {
+
           return Container(
             height: 80,
           );
         }
-        return itemContainer(inventories[index]);
+        return itemContainer(inventories[index - 1]);
       },
-    );
+    ); */
   }
 
   Widget itemContainer(InventoryItemModel inventory) {
@@ -93,20 +106,21 @@ class InventoryScreenState extends State<InventoryScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 10,
+        pollInterval: 30,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        print(result.errors);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null && result.data['getAllInventory'] != null) {
           List inventoryList = result.data['getAllInventory']['inventory'];
+          inventoryList.sort((a, b) {
+            return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
+          });
           final inventories = inventoryList
               .map((item) => InventoryItemModel.fromJson(item))
               .toList();
-          return Container(
-              margin: EdgeInsets.only(top: 100), child: itemsList(inventories));
+          return Container(child: itemsList(inventories));
         }
         return Container();
       },

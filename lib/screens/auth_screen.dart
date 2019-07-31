@@ -237,7 +237,6 @@ class AuthScreenState extends State<AuthScreen> {
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             }
-            print("AUTH DONE: Type: ${user.accountType} ID: ${user.id}");
           }
         }
         if (resultData['staffLogin']['error'] != null) {

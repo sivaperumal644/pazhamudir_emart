@@ -68,7 +68,7 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
             child: Text(
               '${widget.url}' == 'null' && !isImageSet
                   ? 'ADD IMAGE'
-                  : 'UPDATE IMAGE',
+                  : 'CHANGE IMAGE',
               style: TextStyle(
                   color: GREEN_COLOR,
                   fontSize: 14,

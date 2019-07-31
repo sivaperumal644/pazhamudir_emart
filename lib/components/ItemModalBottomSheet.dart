@@ -7,6 +7,7 @@ import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphq
 import 'package:pazhamuthir_emart_service/constants/graphql/updateInventory_graphql.dart';
 import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
 import 'package:pazhamuthir_emart_service/components/ImageSelectionWidget.dart';
@@ -64,6 +65,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
   @override
   void initState() {
     super.initState();
+    imageCache.clear();
     if (widget.isNewInventory) {
       nameController = TextEditingController();
       categoryController = TextEditingController();
@@ -116,9 +118,11 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
               Padding(
                 padding: const EdgeInsets.only(top: 24.0),
                 child: new ImageSelectionWidget(
+                  url: widget.isNewInventory
+                      ? null
+                      : 'http://pazhamudhir.herokuapp.com/image/${widget.inventory.id}',
                   onUserImageSet: (base64) {
                     setState(() {
-                      print("RETURNED FROM IMAGE PICKER $base64");
                       imageAsBase64 = base64;
                     });
                   },
@@ -281,15 +285,13 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         },
       }),
       builder: (runMutation, result) {
-        print(result.errors);
-        print(result.data);
         return saveChangesButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print(resultData);
+        print("update mutation succeeded");
         Navigator.pop(context);
       },
     );
@@ -320,6 +322,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
       buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
       onPressed: isEverythingValidated()
           ? () {
+              print(imageAsBase64);
               widget.isNewInventory
                   ? runMutation({
                       'name': nameController.text,
