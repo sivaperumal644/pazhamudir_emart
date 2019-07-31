@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/auth.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:provider/provider.dart';
 import '../appState.dart';
 import 'home_screen.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/auth_graphql.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'HomeScreenDelivery.dart';
+
+import 'home_screen_delivery.dart';
 
 class AuthScreen extends StatefulWidget {
   @override

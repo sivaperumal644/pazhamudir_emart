@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pazhamuthir_emart_service/components/ItemModalBottomSheet.dart';
 import 'package:pazhamuthir_emart_service/constants/styles.dart';
 import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
+import 'package:pazhamuthir_emart_service/screens/edit_inventory_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../appState.dart';
 
 class InventoryItemWidget extends StatelessWidget {
   final String id;
@@ -25,6 +28,7 @@ class InventoryItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     String timeStamp = DateTime.now().toString();
     if (!name.toLowerCase().contains(searchText.toLowerCase())) {
       return Container();
@@ -34,6 +38,7 @@ class InventoryItemWidget extends StatelessWidget {
         children: <Widget>[
           InkWell(
             onTap: () {
+              appState.setIsStaffAssignedSelected(false);
               Navigator.push(
                 context,
                 MaterialPageRoute(

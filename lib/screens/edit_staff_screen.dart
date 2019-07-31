@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pazhamuthir_emart_service/components/AppTitleWidget.dart';
-import 'package:pazhamuthir_emart_service/components/DetailsTextField.dart';
-import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
+import 'package:pazhamuthir_emart_service/components/app_title_widget.dart';
+import 'package:pazhamuthir_emart_service/components/confirm_dialog_action.dart';
+import 'package:pazhamuthir_emart_service/components/details_text_field.dart';
+import 'package:pazhamuthir_emart_service/components/secondary_button_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/createStaff_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/disableStaff_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/create_staff.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/disable_staff.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/update_staff.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:provider/provider.dart';
@@ -147,7 +148,8 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 28.0, top: 32.0, bottom: 20.0),
+            padding: const EdgeInsets.only(
+                left: 32.0, right: 28.0, top: 32.0, bottom: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -166,7 +168,13 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
   OutlineButton removeButton(RunMutation runMutation) {
     return OutlineButton(
       onPressed: () {
-        runMutation({'staffId': id});
+        showConfirmHarmfulActionDialog(
+            title: 'Confirm delete staff',
+            context: context,
+            content:
+                'Are you sure you want to delete this staff member. You cannot undo this operation.',
+            runMutation: runMutation,
+            runMutationData: {'staffId': id});
       },
       shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(12.0)),
@@ -238,6 +246,7 @@ class _EditMemberDetailsScreenState extends State<EditMemberDetailsScreen> {
         return SecondaryButtonWidget(
           buttonText: inputText,
           onPressed: () {
+            appState.setIsStaffAssignedSelected(true);
             runMutation({
               'staffId': id,
               'name': nameController.text,

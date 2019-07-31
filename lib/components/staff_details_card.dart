@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
-import 'package:pazhamuthir_emart_service/screens/EditMemberScreen.dart';
+import 'package:pazhamuthir_emart_service/screens/edit_staff_screen.dart';
+import 'package:provider/provider.dart';
+
+import '../appState.dart';
 
 class StaffDetailsCard extends StatelessWidget {
   final StaffModel staff;
@@ -9,9 +12,11 @@ class StaffDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Card(
       child: InkWell(
         onTap: () {
+          appState.setIsStaffAssignedSelected(false);
           Navigator.push(
               context,
               MaterialPageRoute(

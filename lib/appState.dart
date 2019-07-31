@@ -14,6 +14,13 @@ class AppState with ChangeNotifier {
   String orderId = "";
   String staffId = '';
   String deliveryStaffId = "";
+  bool staffSelected = false;
+  bool isStaffAssignedSelected = false;
+
+  void setIsStaffAssignedSelected(bool text) {
+    isStaffAssignedSelected = text;
+    notifyListeners();
+  }
 
   void setIsUserDelivery(bool t) {
     isUserDelivery = t;
@@ -61,6 +68,10 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setIsStaffSelected(bool text) {
+    staffSelected = true;
+  }
+
   get getJwtToken => jwtToken;
   get getIsOrderAccepted => isOrderAccepted;
   get getIsUserDelivery => isUserDelivery;
@@ -68,4 +79,6 @@ class AppState with ChangeNotifier {
   get getUserName => userName;
   get getOrderId => orderId;
   get getStaffId => staffId;
+  get getIsStaffSelected => staffSelected;
+  get getIsStaffAssigned => isStaffAssignedSelected;
 }

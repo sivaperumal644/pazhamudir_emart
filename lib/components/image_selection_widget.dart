@@ -1,17 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:image/image.dart' as ImageConverter;
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/updateInventory_graphql.dart';
-import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
-import 'package:provider/provider.dart';
-import 'PrimaryButtonWidget.dart';
-import 'package:pazhamuthir_emart_service/appState.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 

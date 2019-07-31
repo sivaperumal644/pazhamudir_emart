@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
-import 'package:pazhamuthir_emart_service/components/InventoryListItemWidget.dart';
+import 'package:pazhamuthir_emart_service/components/inventory_list_item.dart';
+import 'package:pazhamuthir_emart_service/components/search_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/components/SearchWidget.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/allInventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/get_all_inventory.dart';
 import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
-import 'package:pazhamuthir_emart_service/components/ItemModalBottomSheet.dart';
 import 'package:provider/provider.dart';
+
+import 'edit_inventory_screen.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class InventoryScreen extends StatefulWidget {
 class InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Stack(
       alignment: Alignment.topCenter,
       children: <Widget>[
@@ -28,17 +30,15 @@ class InventoryScreenState extends State<InventoryScreen> {
           body: _getInventoryQuery(),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
+              appState.setIsStaffAssignedSelected(false);
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ItemModalBottomSheet(
-                            isNewInventory: true,
-                          )));
-              // showModalBottomSheet(
-              //     context: context,
-              //     builder: (BuildContext context) {
-              //       return ItemModalBottomSheet();
-              //     });
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ItemModalBottomSheet(
+                    isNewInventory: true,
+                  ),
+                ),
+              );
             },
             label: Text(
               'NEW ITEM',
@@ -62,25 +62,14 @@ class InventoryScreenState extends State<InventoryScreen> {
         Container(
           height: 80,
         ),
-        ...inventories.map((model) => itemContainer(model)),
+        ...inventories.map(
+          (model) => itemContainer(model),
+        ),
         Container(
           height: 80,
         )
       ],
     );
-    /* return ListView.builder(
-      itemCount: inventories.length + 1,
-      itemBuilder: (context, index) {
-        print(index);
-        if (index == inventories.length || index == 0) {
-
-          return Container(
-            height: 80,
-          );
-        }
-        return itemContainer(inventories[index - 1]);
-      },
-    ); */
   }
 
   Widget itemContainer(InventoryItemModel inventory) {
@@ -109,7 +98,10 @@ class InventoryScreenState extends State<InventoryScreen> {
         pollInterval: 30,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.loading)
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null && result.data['getAllInventory'] != null) {

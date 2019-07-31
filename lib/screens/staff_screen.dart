@@ -2,25 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
-import 'package:pazhamuthir_emart_service/components/StaffDetailsCard.dart';
+import 'package:pazhamuthir_emart_service/components/staff_details_card.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/getAllStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/get_all_staff.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
 import 'package:provider/provider.dart';
-import 'EditMemberScreen.dart';
+
+import 'edit_staff_screen.dart';
 
 class StaffScreen extends StatelessWidget {
-  StaffModel temporaryStaff = StaffModel(
-      accountType: 'DELIVERY_EXECUTIVE',
-      name: 'Sivaram',
-      phoneNumber: '444444444',
-      token: 'E45ERT',
-      isActive: true,
-      status: 'DEAD',
-      id: '232345');
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: Stack(
@@ -31,10 +25,11 @@ class StaffScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, top: 54),
                 child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.arrow_back)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back),
+                ),
               ),
               Padding(
                 padding:
@@ -42,13 +37,16 @@ class StaffScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Staff',
-                        style: TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'RaleWay',
-                            fontWeight: FontWeight.bold)),
+                    Text(
+                      'Staff',
+                      style: TextStyle(
+                          fontSize: 32,
+                          fontFamily: 'RaleWay',
+                          fontWeight: FontWeight.bold),
+                    ),
                     OutlineButton(
                       onPressed: () {
+                        appState.setIsStaffAssignedSelected(false);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -57,7 +55,8 @@ class StaffScreen extends StatelessWidget {
                                     )));
                       },
                       shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(12.0)),
+                        borderRadius: new BorderRadius.circular(12.0),
+                      ),
                       child: Text(
                         'ADD',
                         style: TextStyle(color: GREEN_COLOR),
@@ -121,8 +120,9 @@ class StaffScreen extends StatelessWidget {
           final staffs =
               staffList.map((item) => StaffModel.fromJson(item)).toList();
           return Container(
-              margin: EdgeInsets.only(top: 100),
-              child: staffListComponent(staffs));
+            margin: EdgeInsets.only(top: 100),
+            child: staffListComponent(staffs),
+          );
         }
 
         return Container();

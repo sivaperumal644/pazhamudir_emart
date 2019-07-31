@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +27,12 @@ class PrimaryButtonWidget extends StatelessWidget {
             borderRadius: new BorderRadius.circular(8.0)),
         child: Padding(
           padding: const EdgeInsets.all(18.0),
-          child: Text(
-            buttonText,
-            style: TextStyle(fontSize: 18, color: WHITE_COLOR),
-          ),
+          child: appState.getIsStaffAssigned
+              ? CupertinoActivityIndicator()
+              : Text(
+                  buttonText,
+                  style: TextStyle(fontSize: 18, color: WHITE_COLOR),
+                ),
         ),
       ),
     );

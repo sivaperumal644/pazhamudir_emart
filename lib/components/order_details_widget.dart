@@ -56,7 +56,7 @@ class OrderDetailsWidget extends StatelessWidget {
           value: order.address.name,
         ),
         AddressItemWidget(
-          title: 'Contact No.',
+          title: 'Contact No',
           value: order.address.phoneNumber,
         ),
         AddressItemWidget(
@@ -82,7 +82,7 @@ class OrderDetailsWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 32.0),
+              padding: const EdgeInsets.only(left: 10.0),
               child: Text(
                 'Call the customer',
                 style: TextStyle(fontSize: 14),

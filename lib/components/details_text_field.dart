@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 
 class DetailsTextField extends StatelessWidget {

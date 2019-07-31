@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
-import 'package:pazhamuthir_emart_service/components/DeliveredDialog.dart';
-import 'package:pazhamuthir_emart_service/components/OrderDetailsWidget.dart';
-import 'package:pazhamuthir_emart_service/components/PrimaryButtonWidget.dart';
+import 'package:pazhamuthir_emart_service/components/confirm_dialog_action.dart';
+import 'package:pazhamuthir_emart_service/components/delivered_dialog.dart';
+import 'package:pazhamuthir_emart_service/components/order_details_widget.dart';
+import 'package:pazhamuthir_emart_service/components/primary_button_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/changeOrderStatus_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/change_order_status.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:provider/provider.dart';
 
-import 'AssignStaffScreen.dart';
+import 'assign_staff_screen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final OrderModel order;
@@ -55,12 +56,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         fontFamily: 'Raleway',
                         fontWeight: FontWeight.bold),
                   ),
-                  Text('#${widget.order.orderNo}',
-                      style: TextStyle(
-                          color: GREY_COLOR,
-                          fontSize: 24,
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.bold))
+                  Text(
+                    '#${widget.order.orderNo}',
+                    style: TextStyle(
+                        color: GREY_COLOR,
+                        fontSize: 24,
+                        fontFamily: 'Raleway',
+                        fontWeight: FontWeight.bold),
+                  )
                 ],
               ),
             ),
@@ -70,25 +73,27 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 order: widget.order,
               ),
             ),
-            if (!appState.isUserDelivery)
+            if (!appState.isUserDelivery &&
+                (widget.order.status != OrderStatuses.CANCELLED_BY_CUST &&
+                    widget.order.status != OrderStatuses.CANCELLED_BY_STORE &&
+                    widget.order.status != OrderStatuses.DELIVERED_AND_PAID))
               Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+                padding:
+                    const EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
                 child: cancelOrderMutation(),
               ),
-            if (!appState.isUserDelivery)
+            if (!appState.isUserDelivery &&
+                widget.order.status == OrderStatuses.PLACED_BY_CUST)
               PrimaryButtonWidget(
                   buttonText: 'ACCEPT ORDER',
                   onPressed: () {
                     appState.setOrderId(widget.order.id);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StaffModalWidget()));
-                    // showModalBottomSheet(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return StaffModalWidget();
-                    //     });
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StaffModalWidget(),
+                      ),
+                    );
                   }),
             if (appState.isUserDelivery) resolveDeliveryButtons()
           ],
@@ -98,20 +103,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Widget rejectButton(RunMutation runMutation) {
-    return FlatButton(
-      onPressed: () {
-        runMutation({
-          'status': OrderStatuses.CANCELLED_BY_STORE,
-          'orderId': widget.order.id
-        });
-      },
-      child: Text(
-        'REJECT THIS ORDER',
-        style: TextStyle(
-            fontSize: 14,
-            color: RED_COLOR,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.4),
+    return Container(
+      width: MediaQuery.of(context).size.width - 400,
+      child: FlatButton(
+        onPressed: () {
+          showConfirmHarmfulActionDialog(
+            context: context,
+            title: 'Confirm reject order?',
+            content:
+                'Are you sure you want to reject this order? You cannot undo this operation',
+            runMutation: runMutation,
+            runMutationData: {
+              'status': OrderStatuses.CANCELLED_BY_STORE,
+              'orderId': widget.order.id
+            },
+          );
+        },
+        child: Text(
+          'REJECT THIS ORDER',
+          style: TextStyle(
+              fontSize: 14,
+              color: RED_COLOR,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.4),
+        ),
       ),
     );
   }
@@ -182,13 +197,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             title: 'MARK ORDER COMPLETE');
       default:
         return Center(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'No actions available now.',
-            style: TextStyle(color: GREY_COLOR),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'No actions available now.',
+              style: TextStyle(color: GREY_COLOR),
+            ),
           ),
-        ));
+        );
     }
   }
 }

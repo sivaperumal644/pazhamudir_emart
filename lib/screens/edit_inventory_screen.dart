@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pazhamuthir_emart_service/components/confirm_dialog_action.dart';
+import 'package:pazhamuthir_emart_service/components/image_selection_widget.dart';
+import 'package:pazhamuthir_emart_service/components/primary_button_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/deleteInventory_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/new_inventory_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/updateInventory_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/add_new_inventory.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/delete_inventory.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/update_inventory.dart';
 import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import 'PrimaryButtonWidget.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
-import 'package:pazhamuthir_emart_service/components/ImageSelectionWidget.dart';
 
 class ItemModalBottomSheet extends StatefulWidget {
   String id;
@@ -119,7 +120,7 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
                 padding: const EdgeInsets.only(top: 24.0),
                 child: new ImageSelectionWidget(
                   url: widget.isNewInventory
-                      ? null
+                      ? 'http://pazhamudhir.herokuapp.com/image/demo'
                       : 'http://pazhamudhir.herokuapp.com/image/${widget.inventory.id}',
                   onUserImageSet: (base64) {
                     setState(() {
@@ -251,7 +252,13 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         color: Colors.red,
       ),
       onPressed: () {
-        runMutation({'inventoryId': widget.id});
+        showConfirmHarmfulActionDialog(
+            context: context,
+            title: 'Confirm delete item?',
+            content:
+                'Are you sure you want to delete this item. You cannot undo this operation.',
+            runMutation: runMutation,
+            runMutationData: {'inventoryId': widget.id});
       },
     );
   }
@@ -265,9 +272,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         },
       }),
       builder: (runMutation, result) {
+        print(result.errors);
+        print(result.data);
         return saveChangesButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
+        print(result.data);
         return cache;
       },
       onCompleted: (dynamic resultData) {
@@ -318,11 +328,12 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
   }
 
   Widget saveChangesButton(RunMutation runMutation) {
+    final appState = Provider.of<AppState>(context);
     return PrimaryButtonWidget(
       buttonText: widget.isNewInventory ? 'ADD ITEM' : 'SAVE CHANGES',
       onPressed: isEverythingValidated()
           ? () {
-              print(imageAsBase64);
+              appState.setIsStaffAssignedSelected(true);
               widget.isNewInventory
                   ? runMutation({
                       'name': nameController.text,

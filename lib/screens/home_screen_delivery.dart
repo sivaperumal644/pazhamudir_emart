@@ -6,8 +6,7 @@ import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/navigation_drawer.dart';
 import 'package:provider/provider.dart';
 import '../appState.dart';
-import 'OrdersScreen.dart';
-import 'InventoryScreen.dart';
+import 'order_screen.dart';
 
 class HomeScreenForDelivery extends StatefulWidget {
   @override

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/screens/home_screen.dart';
+import 'package:pazhamuthir_emart_service/screens/home_screen_delivery.dart';
 import 'package:provider/provider.dart';
 import 'appState.dart';
 import 'screens/auth_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/HomeScreenDelivery.dart';
 
 main() => runApp(MyApp());
 

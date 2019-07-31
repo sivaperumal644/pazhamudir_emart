@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pazhamuthir_emart_service/appState.dart';
-import 'package:pazhamuthir_emart_service/components/PrimaryButtonWidget.dart';
-import 'package:pazhamuthir_emart_service/components/SecondaryButtonWidget.dart';
+import 'package:pazhamuthir_emart_service/components/primary_button_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/assignStaff_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/getAllStaff_graphql.dart';
-import 'package:pazhamuthir_emart_service/constants/graphql/updateStaff_graphql.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/assign_staff.dart';
+import 'package:pazhamuthir_emart_service/constants/graphql/get_all_staff.dart';
 import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/StaffModel.dart';
+import 'package:pazhamuthir_emart_service/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class StaffModalWidget extends StatefulWidget {
@@ -28,41 +27,43 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
   String assignedStaffId = '';
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
         backgroundColor: WHITE_COLOR,
-        body: Stack(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 32.0),
-                      child: Text(
-                        'Assign Staff',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Raleway'),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Text('Please choose the delivery in-charge',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18)),
-                    ),
-                  ],
-                ),
-                getStaffQuery(context),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[assignStaffMutation()],
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 36.0),
+              child: InkWell(
+                onTap: () {
+                  appState.setIsStaffSelected(false);
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back),
+              ),
             ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  'Assign Staff',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                child: Text('Please choose the delivery in-charge',
+                    style: TextStyle(fontSize: 18)),
+              ),
+            ),
+            getStaffQuery(context),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[assignStaffMutation()],
+            )
           ],
         ));
   }
@@ -73,29 +74,37 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
         width: double.infinity,
         child: PrimaryButtonWidget(
           buttonText: 'Done',
-          onPressed: () {
-            runMutation(
-                {'staffId': assignedStaffId, 'orderId': appState.getOrderId});
-          },
+          onPressed: assignedStaffId.isNotEmpty
+              ? () {
+                appState.setIsStaffAssignedSelected(true);
+                  runMutation({
+                    'staffId': assignedStaffId,
+                    'orderId': appState.getOrderId
+                  });
+                }
+              : null,
         ));
   }
 
-  ListView deliveryStaffList(List<StaffModel> staffs) {
-    return ListView.builder(
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemCount: staffs.length,
-        itemBuilder: (context, index) {
-          if (staffs[index].accountType == AccountTypes.DELIVERY)
-            return staffWidget(staffs[index]);
-          else
-            return Container();
-        });
+  Widget deliveryStaffList(List<StaffModel> staffs) {
+    return Expanded(
+      child: ListView.builder(
+          physics: ScrollPhysics(),
+          itemCount: staffs.length,
+          itemBuilder: (context, index) {
+            if (staffs[index].accountType == AccountTypes.DELIVERY &&
+                staffs[index].isActive != false)
+              return staffWidget(staffs[index]);
+            else
+              return Container();
+          }),
+    );
   }
 
   Padding staffWidget(StaffModel staff) {
     staffName = staff?.name;
     phoneNumber = staff?.phoneNumber;
+    final appState = Provider.of<AppState>(context);
     if (staff.status != null)
       status = staff?.status;
     else
@@ -133,6 +142,7 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
                 onChanged: (String value) {
                   setState(() {
                     assignedStaffId = value;
+                    appState.setIsStaffSelected(true);
                   });
                 },
               ),
@@ -161,7 +171,7 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
           List staffList = result.data['getAllStaffs'];
           final staffs =
               staffList.map((item) => StaffModel.fromJson(item)).toList();
-          return Container(child: deliveryStaffList(staffs));
+          return deliveryStaffList(staffs);
         }
         return Container();
       },
@@ -184,7 +194,11 @@ class _StaffModalWidgetState extends State<StaffModalWidget> {
         return doneButton(runMutation);
       },
       onCompleted: (result) {
-        Navigator.pop(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ));
       },
     );
   }

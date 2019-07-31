@@ -4,8 +4,8 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/navigation_drawer.dart';
-import 'OrdersScreen.dart';
-import 'InventoryScreen.dart';
+import 'inventory_screen.dart';
+import 'order_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
