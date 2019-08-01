@@ -86,16 +86,18 @@ class StaffScreen extends StatelessWidget {
   Widget staffListComponent(List<StaffModel> staffs) {
     return Padding(
       padding: const EdgeInsets.only(top: 40),
-      child: ListView.builder(
-        itemCount: staffs.length,
-        itemBuilder: (context, index) {
-          if (staffs[index].accountType != AccountTypes.GOD_ADMIN &&
-              staffs[index].isActive != false)
-            return staffListCard(staffs[index]);
-          else
-            return Container();
-        },
-      ),
+      child: staffs.isEmpty
+          ? Text('No Staffs available.')
+          : ListView.builder(
+              itemCount: staffs.length,
+              itemBuilder: (context, index) {
+                if (staffs[index].accountType != AccountTypes.GOD_ADMIN &&
+                    staffs[index].isActive != false)
+                  return staffListCard(staffs[index]);
+                else
+                  return Container();
+              },
+            ),
     );
   }
 

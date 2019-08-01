@@ -272,12 +272,9 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         },
       }),
       builder: (runMutation, result) {
-        print(result.errors);
-        print(result.data);
         return saveChangesButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
-        print(result.data);
         return cache;
       },
       onCompleted: (dynamic resultData) {
@@ -301,7 +298,6 @@ class _ItemModalBottomSheetState extends State<ItemModalBottomSheet> {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print("update mutation succeeded");
         Navigator.pop(context);
       },
     );

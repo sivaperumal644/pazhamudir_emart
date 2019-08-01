@@ -223,21 +223,19 @@ class AuthScreenState extends State<AuthScreen> {
                 'token', resultData['staffLogin']['jwtToken']);
             await prefs.setString('name', user.name);
             await prefs.setString('staffId', user.id);
-           
+
             if (user.accountType == AccountTypes.DELIVERY) {
               await prefs.setBool('isDelivery', true);
-              print(
-                  'At the time of auth: User account type: ${user.accountType}');
               appState.setIsUserDelivery(true);
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomeScreenForDelivery()),
               );
             } else {
-               await prefs.setBool('isDelivery', false);
-            appState.setIsUserDelivery(false);
-              Navigator.push(
+              await prefs.setBool('isDelivery', false);
+              appState.setIsUserDelivery(false);
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );

@@ -9,7 +9,7 @@ import 'package:pazhamuthir_emart_service/constants/strings.dart';
 import 'package:pazhamuthir_emart_service/model/OrderModel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:pazhamuthir_emart_service/components/NetworkOfflineWidget.dart';
 import 'order_details_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -95,34 +95,43 @@ class OrdersScreenState extends State<OrdersScreen> {
             child: CupertinoActivityIndicator(),
           );
         if (result.hasErrors)
-          return Center(
-            child: Text("Oops something went wrong"),
+          return NetworkErrorIndicatorWidget(
+            refetch: refetch,
           );
-        if (result.data != null && result.data['getAllOrders'] != null) {
+        if (result.data != null &&
+            result.data['getAllOrders']['orders'] != null) {
           List orderList = result.data['getAllOrders']['orders'];
           final orders =
               orderList.map((item) => OrderModel.fromJson(item)).toList();
           List incomingOrders = orders
               .where((item) =>
-                  StringResolver.getTextForOrderStatus(item.status)
-                      .toString() ==
-                  "INCOMING ORDER")
+                  item.status ==
+                  OrderStatuses.PLACED_BY_CUST)
               .toList();
           List activeOrders = orders
               .where((item) =>
-                  StringResolver.getTextForOrderStatus(item.status)
-                      .toString() !=
-                  "INCOMING ORDER")
+                  item.status !=
+                  OrderStatuses.PLACED_BY_CUST)
               .toList();
           if (appState.getIsUserDelivery) {
             var filteredList = orders.where((order) {
               return order.staff?.id == staffId;
             }).toList();
-            return mainList(isDelivery, filteredList, []);
+            var assignedFilteredList = filteredList.where((order) {
+              return order.status == OrderStatuses.PICKED_UP ||
+                  order.status == OrderStatuses.RECEIVED_BY_STORE;
+            }).toList();
+            var completedFilteredList = filteredList.where((order) {
+              return order.status == OrderStatuses.CANCELLED_BY_CUST ||
+                  order.status == OrderStatuses.CANCELLED_BY_STORE ||
+                  order.status == OrderStatuses.DELIVERED_AND_PAID;
+            }).toList();
+            return mainList(
+                isDelivery, assignedFilteredList, completedFilteredList);
           }
           return mainList(isDelivery, incomingOrders, activeOrders);
         }
-        return Container();
+        return new Container();
       },
     );
   }
@@ -133,7 +142,7 @@ class OrdersScreenState extends State<OrdersScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 32.0, left: 20.0),
           child: Text(
-            isDelivery ? 'ASSIGNED TO YOU' : 'INCOMING ORDER',
+            isDelivery ? 'ASSIGNED TO YOU' : 'INCOMING ORDERS',
             style: TextStyle(
                 color: BLACK_COLOR,
                 fontWeight: FontWeight.bold,
@@ -146,31 +155,43 @@ class OrdersScreenState extends State<OrdersScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 32.0),
                   child: isDelivery
-                      ? Text('No orders found for you.')
-                      : Text('No Incoming orders right now'),
+                      ? Text(
+                          'No orders found for you.',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade400),
+                        )
+                      : Text(
+                          'No Incoming orders right now',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade400),
+                        ),
                 ),
               )
             : orderListComponent(incomingOrders),
-        if (!isDelivery) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 32.0, left: 20.0),
-            child: Text(
-              'ACTIVE ORDERS',
-              style: TextStyle(
-                  color: BLACK_COLOR,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  letterSpacing: 1.0),
-            ),
+        Padding(
+          padding: const EdgeInsets.only(top: 32.0, left: 20.0),
+          child: Text(
+            'COMPLETED ORDERS',
+            style: TextStyle(
+                color: BLACK_COLOR,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                letterSpacing: 1.0),
           ),
-          activeOrders.isEmpty
-              ? Center(
-                  child: Padding(
-                  padding: const EdgeInsets.only(top: 32.0),
-                  child: Text('No active orders right now'),
-                ))
-              : orderListComponent(activeOrders),
-        ],
+        ),
+        activeOrders.isEmpty
+            ? Center(
+                child: Padding(
+                padding: const EdgeInsets.only(top: 32.0),
+                child: Text(
+                  'No active orders right now',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500, color: Colors.grey.shade400),
+                ),
+              ))
+            : orderListComponent(activeOrders),
         Container(
           height: 30,
         )

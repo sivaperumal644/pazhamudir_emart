@@ -8,6 +8,9 @@ import 'package:pazhamuthir_emart_service/components/search_widget.dart';
 import 'package:pazhamuthir_emart_service/constants/colors.dart';
 import 'package:pazhamuthir_emart_service/constants/graphql/get_all_inventory.dart';
 import 'package:pazhamuthir_emart_service/model/InventoryItemModel.dart';
+import 'package:pazhamuthir_emart_service/screens/order_screen.dart';
+import 'package:pazhamuthir_emart_service/components/NetworkOfflineWidget.dart';
+
 import 'package:provider/provider.dart';
 
 import 'edit_inventory_screen.dart';
@@ -57,19 +60,26 @@ class InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget itemsList(List<InventoryItemModel> inventories) {
-    return ListView(
-      children: <Widget>[
-        Container(
-          height: 80,
-        ),
-        ...inventories.map(
-          (model) => itemContainer(model),
-        ),
-        Container(
-          height: 80,
-        )
-      ],
-    );
+    return inventories.isEmpty
+        ? Center(
+            child: Text(
+            'There are no items in the inventory'.toUpperCase(),
+            style: TextStyle(
+                fontWeight: FontWeight.w500, color: Colors.grey.shade400),
+          ))
+        : ListView(
+            children: <Widget>[
+              Container(
+                height: 80,
+              ),
+              ...inventories.map(
+                (model) => itemContainer(model),
+              ),
+              Container(
+                height: 80,
+              )
+            ],
+          );
   }
 
   Widget itemContainer(InventoryItemModel inventory) {
@@ -103,8 +113,11 @@ class InventoryScreenState extends State<InventoryScreen> {
             child: CupertinoActivityIndicator(),
           );
         if (result.hasErrors)
-          return Center(child: Text("Oops something went wrong"));
-        if (result.data != null && result.data['getAllInventory'] != null) {
+          return NetworkErrorIndicatorWidget(
+            refetch: refetch,
+          );
+        if (result.data != null &&
+            result.data['getAllInventory']['inventory'] != null) {
           List inventoryList = result.data['getAllInventory']['inventory'];
           inventoryList.sort((a, b) {
             return a['name'].toLowerCase().compareTo(b['name'].toLowerCase());
