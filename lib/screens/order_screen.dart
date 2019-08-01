@@ -78,6 +78,7 @@ class OrdersScreenState extends State<OrdersScreen> {
   Widget getAllOrderQueryComponent() {
     final appState = Provider.of<AppState>(context);
     bool isDelivery = appState.getIsUserDelivery;
+    List orderList = [];
     return Query(
       options: QueryOptions(
         document: getAllOrderQuery,
@@ -146,7 +147,7 @@ class OrdersScreenState extends State<OrdersScreen> {
                   padding: const EdgeInsets.only(top: 32.0),
                   child: isDelivery
                       ? Text('No orders found for you.')
-                      : Text('No Incoming orders found'),
+                      : Text('No Incoming orders right now'),
                 ),
               )
             : orderListComponent(incomingOrders),
@@ -166,7 +167,7 @@ class OrdersScreenState extends State<OrdersScreen> {
               ? Center(
                   child: Padding(
                   padding: const EdgeInsets.only(top: 32.0),
-                  child: Text('No Incoming orders found'),
+                  child: Text('No active orders right now'),
                 ))
               : orderListComponent(activeOrders),
         ],

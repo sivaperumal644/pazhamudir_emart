@@ -137,6 +137,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       buttonText: '$title',
       onPressed: () {
         runMutation({"status": status, "orderId": widget.order.id});
+        Navigator.pop(context);
       },
     );
   }

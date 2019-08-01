@@ -217,15 +217,17 @@ class AuthScreenState extends State<AuthScreen> {
           final user = StaffModel.fromJson(resultData['staffLogin']['user']);
           appState.setUserName(user.name);
           appState.setStaffId(user.id);
+          appState.setJwtToken(resultData['staffLogin']['jwtToken']);
           if (user != null) {
             await prefs.setString(
                 'token', resultData['staffLogin']['jwtToken']);
             await prefs.setString('name', user.name);
             await prefs.setString('staffId', user.id);
-            await prefs.setBool('isDelivery', false);
-            appState.setIsUserDelivery(false);
+           
             if (user.accountType == AccountTypes.DELIVERY) {
               await prefs.setBool('isDelivery', true);
+              print(
+                  'At the time of auth: User account type: ${user.accountType}');
               appState.setIsUserDelivery(true);
               Navigator.push(
                 context,
@@ -233,6 +235,8 @@ class AuthScreenState extends State<AuthScreen> {
                     builder: (context) => HomeScreenForDelivery()),
               );
             } else {
+               await prefs.setBool('isDelivery', false);
+            appState.setIsUserDelivery(false);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),

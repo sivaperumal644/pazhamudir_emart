@@ -69,6 +69,8 @@ Future buildShowDialog(BuildContext context, OrderModel order,
                           "status": OrderStatuses.DELIVERED_AND_PAID,
                           "orderId": order.id
                         });
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                   ),

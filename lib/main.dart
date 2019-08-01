@@ -61,5 +61,6 @@ class _MyAppState extends State<MyApp> {
       isAuthenticated = token != null;
       isDelivery = isDelivery;
     });
+    print('from preferences delivery = $isDelivery');
   }
 }

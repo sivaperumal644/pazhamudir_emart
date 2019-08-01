@@ -192,9 +192,19 @@ class OrderItemListItemWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         children: <Widget>[
-          Text('${item.name}'),
+          Expanded(child: Text('${item.name}')),
           Spacer(),
-          Text('Rs. ${item.price}')
+          Text(
+            '${item.quantity}x',
+            style: TextStyle(letterSpacing: 1.4),
+          ),
+          Container(
+            width: 10,
+          ),
+          Text(
+            'Rs. ${item.price}',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )
         ],
       ),
     );
