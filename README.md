@@ -1,16 +1,25 @@
-# pazhamuthir_emart_service
+# Pazhamuthir Emart - Service Mobile App
 
-A new Flutter project.
+Service app for use by the staff of local grocery, part of online local grocery app. 
 
-## Getting Started
+## Download APK
 
-This project is a starting point for a Flutter application.
+The Release APK can be downloaded [here](https://drive.google.com/open?id=1tcM05SKi0KyejVf2IJ_Kvv0Hz7H_2Pvf)
+__To login, please use `CHICKENDINNER` as the sign in token.__
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Login by shop owner/shop staff.
+- View new and completed orders placed by customer.
+- Maintain inventory - add,edit and delete items.
+- Works with GraphQL requests.
+- Made with Flutter.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+
+<img src = "https://github.com/sivaperumal644/pazhamudir_emart/blob/master/images/screenshot1.png?raw=true" max-width=200/>
+<img src = "https://github.com/sivaperumal644/pazhamudir_emart/blob/master/images/screenshot2.png?raw=true" max-width=200/>
+<img src = "https://github.com/sivaperumal644/pazhamudir_emart/blob/master/images/screenshot3.png?raw=true" max-width=200/>
+
+
+
